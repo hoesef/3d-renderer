@@ -1,0 +1,2 @@
+# Readme
+This project aims to implement a 3d renderer using ray-tracing. Initially it will implement backwards ray-tracing (rays from camera going into the scene), but will end up as a forward ray-tracer (rays from a light source to the camera).
