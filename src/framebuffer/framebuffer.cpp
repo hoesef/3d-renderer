@@ -4,25 +4,25 @@
 
 // Constructor
 Framebuffer::Framebuffer(uint32_t w, uint32_t h) {
-    width = w;
-    height = h;
-    fb = new Pixel[w * h];
+    m_width = w;
+    m_height = h;
+    m_fb = new Pixel[w * h];
 }
 
 // Set pixel value at position (x, y)
 int Framebuffer::setPixel(uint32_t x, uint32_t y, float r, float g, float b) {
     // Chech that position is within image bounds
-    if ((x >= width) || y >= height) {
+    if ((x >= m_width) || y >= m_height) {
         return -1;
     }
 
     // Get index
-    uint32_t i = y * width + x;
+    uint32_t i = y * m_width + x;
 
     // Set pixel
-    fb[i].red = r;
-    fb[i].green= g;
-    fb[i].blue= b;
+    m_fb[i].red = r;
+    m_fb[i].green= g;
+    m_fb[i].blue= b;
 
     return 0;
 }
@@ -30,17 +30,17 @@ int Framebuffer::setPixel(uint32_t x, uint32_t y, float r, float g, float b) {
 // Get pixel value at position (x, y)
 int Framebuffer::getPixel(uint32_t x, uint32_t y, float& r, float& g, float& b) {
     // Check that position is within image bounds
-    if ((x >= width) || (y >= height)) {
+    if ((x >= m_width) || (y >= m_height)) {
         return -1;
     }
     
     // Get index
-    uint32_t i = y * width + x;
+    uint32_t i = y * m_width + x;
 
     // Get r,g,b values
-    r = fb[i].red;
-    g = fb[i].green;
-    b = fb[i].blue;
+    r = m_fb[i].red;
+    g = m_fb[i].green;
+    b = m_fb[i].blue;
 
     return 0;
 }
@@ -48,12 +48,12 @@ int Framebuffer::getPixel(uint32_t x, uint32_t y, float& r, float& g, float& b) 
 // Set depth at position (x, y)
 int Framebuffer::setDepth(uint32_t x, uint32_t y, float d) {
     // Check that position is within image bounds
-    if ((x >= width) || (y >= height)) {
+    if ((x >= m_width) || (y >= m_height)) {
         return -1;
     }
 
     // Set depth
-    fb[y * width + x].depth = d;
+    m_fb[y * m_width + x].depth = d;
     
     return 0;
 }
@@ -61,12 +61,12 @@ int Framebuffer::setDepth(uint32_t x, uint32_t y, float d) {
 // Get depth at position (x, y)
 int Framebuffer::getDepth(uint32_t x, uint32_t y, float& d) {
     // Check that position is within image bounds
-    if ((x >= width) || (y >= height)) {
+    if ((x >= m_width) || (y >= m_height)) {
         return -1;
     }
 
     // Get depth
-    d = fb[y * width + x].depth;
+    d = m_fb[y * m_width + x].depth;
 
     return 0;
 }
@@ -88,17 +88,17 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
     float d_max = 0.0f;
     float d_min = 0.0f;
 
-    for (uint32_t i = 0; i < width * height; i++) {
+    for (uint32_t i = 0; i < m_width * m_height; i++) {
         // Get max/min r,b,g value
-        if (fb[i].red > i_max) { i_max = fb[i].red; }
-        if (fb[i].red < i_min) { i_min = fb[i].red; }
-        if (fb[i].red > i_max) { i_max = fb[i].green; }
-        if (fb[i].red < i_min) { i_min = fb[i].green; }
-        if (fb[i].red > i_max) { i_max = fb[i].blue; }
-        if (fb[i].red < i_min) { i_min = fb[i].blue; }
+        if (m_fb[i].red > i_max) { i_max = m_fb[i].red; }
+        if (m_fb[i].red < i_min) { i_min = m_fb[i].red; }
+        if (m_fb[i].red > i_max) { i_max = m_fb[i].green; }
+        if (m_fb[i].red < i_min) { i_min = m_fb[i].green; }
+        if (m_fb[i].red > i_max) { i_max = m_fb[i].blue; }
+        if (m_fb[i].red < i_min) { i_min = m_fb[i].blue; }
         // Get max/min depth value
-        if (fb[i].depth > d_max) { d_max = fb[i].depth; }
-        if (fb[i].depth < d_min) { d_min = fb[i].depth; }
+        if (m_fb[i].depth > d_max) { d_max = m_fb[i].depth; }
+        if (m_fb[i].depth < d_min) { d_min = m_fb[i].depth; }
     }
 
     float i_diff = i_max - i_min;
@@ -111,16 +111,16 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
     image << "P6\n"; // PPM type
     depth << "P5\n"; // PPM type
 
-    image << width << " " << height << "\n255\n"; // width, height, max colour value
-    depth << width << " " << height << "\n255\n"; // width, height, max colour value
+    image << m_width << " " << m_height << "\n255\n"; // width, height, max colour value
+    depth << m_width << " " << m_height << "\n255\n"; // width, height, max colour value
 
     // Write pixel data
     // Pixels are normalized (possible loss of realism)
-    for (uint32_t i = 0; i < width * height; i++) {
-        image << (unsigned char)((fb[i].red - i_min) / i_diff * 255.00f);   // r
-        image << (unsigned char)((fb[i].green - i_min) / i_diff * 255.00f); // g
-        image << (unsigned char)((fb[i].blue - i_min) / i_diff * 255.00f);  // b
-        depth << (unsigned char)((fb[i].depth - d_min) / d_diff * 255.0f);  // d
+    for (uint32_t i = 0; i < m_width * m_height; i++) {
+        image << (unsigned char)((m_fb[i].red - i_min) / i_diff * 255.00f);   // r
+        image << (unsigned char)((m_fb[i].green - i_min) / i_diff * 255.00f); // g
+        image << (unsigned char)((m_fb[i].blue - i_min) / i_diff * 255.00f);  // b
+        depth << (unsigned char)((m_fb[i].depth - d_min) / d_diff * 255.0f);  // d
     }
 
     // Close image files
@@ -133,5 +133,5 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
 // Destructor
 Framebuffer::~Framebuffer() {
     // Free framebuffer
-    delete[] fb;
+    delete[] m_fb;
 }

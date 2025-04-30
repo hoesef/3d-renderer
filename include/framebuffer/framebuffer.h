@@ -13,11 +13,11 @@ struct Pixel {
 class Framebuffer {
 
     private:
-        Pixel* fb = nullptr;
+        Pixel* m_fb = nullptr;
 
     public:
-        uint32_t width = 0;
-        uint32_t height = 0;
+        uint32_t m_width = 0;
+        uint32_t m_height = 0;
 
     public:
         Framebuffer(uint32_t w, uint32_t h);
