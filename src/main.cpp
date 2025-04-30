@@ -1,13 +1,16 @@
 // Standard library imports
 #include <iostream>
 #include <cstdint>
+#include <math.h>
 
 // 3rd party imports
 
 // Local imports
 #include "..\include\allocation_metrics\allocaion_metrics.h"
 #include "..\include\framebuffer\framebuffer.h"
+#include "..\include\framebuffer\linedrawer.h"
 
+#define M_PI 3.14159265395f
 // Check the allocation metrics to find signs of a memory leak
 void detect_mem_leak() {
     size_t size = s_allocation_metrics.getCurrentMemory();
@@ -32,11 +35,23 @@ int main() {
     const char* filename = "../../images/test.ppm";
     const char* depth = "../../images/test_depth.ppm";
 
-    for (uint32_t y = 0; y < fb.height; y++) {
-        for (uint32_t x = 0; x < fb.width; x++) {
-            fb.setPixel(x, y, (float)x, (float)y, ((float)x+y)/2.0f);
+    for (uint32_t y = 0; y < fb.m_height; y++) {
+        for (uint32_t x = 0; x < fb.m_width; x++) {
+            fb.setPixel(x, y, (float)x/fb.m_width, (float)y/fb.m_height, 0.0f);//((float)x+y)/(fb.m_width+fb.m_height));
             fb.setDepth(x, y, (float)x);
         }
+    }
+
+    drawline(fb, 400, 300, 400, 300);
+    
+    for (float i = 0; i < M_PI * 2; i += M_PI /64.0f)
+    {
+        // Generate a simple 2D vector
+        float x = cos(i);
+        float y = sin(i);
+
+        // draw a line
+        drawline(fb, 400 + (int)(48.0f*x), 300 + (int)(48.0f*y), 400 + (int)(240.0f*x), 300 + (int)(240.0f*y));
     }
 
     fb.plotImage(filename, depth);
