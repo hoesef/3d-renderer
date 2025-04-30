@@ -9,7 +9,7 @@
 
 // Check the allocation metrics to find signs of a memory leak
 void detect_mem_leak() {
-    uint32_t size = s_allocation_metrics.getCurrentMemory();
+    size_t size = s_allocation_metrics.getCurrentMemory();
     std::cout << "\n\n";
     if (size) {
         std::cout << "!!!MEMORY LEAK DETECTED!!!\n";

@@ -17,9 +17,9 @@
 
 struct AllocatioMetrics {
 
-    uint32_t bytes_allocated = 0;
-    uint32_t bytes_deallocated = 0;
-    uint32_t getCurrentMemory() {return bytes_allocated - bytes_deallocated;}
+    size_t bytes_allocated = 0;
+    size_t bytes_deallocated = 0;
+    size_t getCurrentMemory() {return bytes_allocated - bytes_deallocated;}
 
 };
 
