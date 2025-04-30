@@ -6,6 +6,7 @@
 
 // Local imports
 #include "..\include\allocation_metrics\allocaion_metrics.h"
+#include "..\include\framebuffer\framebuffer.h"
 
 // Check the allocation metrics to find signs of a memory leak
 void detect_mem_leak() {
@@ -21,34 +22,24 @@ void detect_mem_leak() {
     std::cout << std::endl;
 }
 
-class Foo {
-
-    private:
-        int num = 5;
-
-    public:
-        Foo(){}
-        int getNum() {return num;};
-
-};
-
 int main() {
 
+    // Run memory leak detection before program termination
     std::atexit(detect_mem_leak);
 
-    memInfo();
+    Framebuffer fb(800, 600);
 
-    int* array = new int[5];
-    for (int i = 0; i < 5; i ++) {
-        array[i] = i;
-        std::cout << "Index " << i << ": " << array[i] << "\n";
+    const char* filename = "../../images/test.ppm";
+    const char* depth = "../../images/test_depth.ppm";
+
+    for (uint32_t y = 0; y < fb.height; y++) {
+        for (uint32_t x = 0; x < fb.width; x++) {
+            fb.setPixel(x, y, (float)x, (float)y, ((float)x+y)/2.0f);
+            fb.setDepth(x, y, (float)x);
+        }
     }
 
-    memInfo();
-
-    delete[] array;
-
-    memInfo();
+    fb.plotImage(filename, depth);
 
     return 0;
 
