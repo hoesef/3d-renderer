@@ -11,6 +11,8 @@
 #include "..\include\framebuffer\linedrawer.h"
 #include "..\include\objects\polymesh.h"
 
+#include <string>
+
 #define M_PI 3.14159265395f
 // Check the allocation metrics to find signs of a memory leak
 void detect_mem_leak() {
@@ -71,6 +73,8 @@ int main() {
 
     fb.plotImage(filename, depth);
 
+    obj.print();
+    
     return 0;
 
 }
