@@ -2,9 +2,8 @@
  * Credit to The Cherno for the Allocation Metric idea
  * Video: Track MEMORY ALLOCATION the Easy Way in C++
  * Link: https://www.youtube.com/watch?v=sLlGEUO_EGE&list=LL&index=1&pp=gAQBiAQB
- */
-
-/*
+ *
+ * 
  * Links to docs: 
  * vscode: file:///./../../docs/allocation_metrics.md
  * path: 3d-renderer/docs/allocation_metrics.md
