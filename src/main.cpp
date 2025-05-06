@@ -10,6 +10,8 @@
 #include "..\include\framebuffer\framebuffer.h"
 #include "..\include\framebuffer\linedrawer.h"
 #include "..\include\objects\polymesh.h"
+#include "..\include\parser\object-parser.h"
+#include "..\include\parser\obj-parser.h"
 
 #include <string>
 
@@ -64,7 +66,7 @@ int main() {
 
     bool success = true;
     const char* file = "../../assets/objects/test.obj";
-    Polymesh obj(file, success);
+    // Polymesh obj(file, success);
 
     std::cout << "Success: " << (success?"true":"false") << "\n";
 
@@ -73,7 +75,20 @@ int main() {
 
     fb.plotImage(filename, depth);
 
-    obj.print();
+    // obj.print();
+    ObjectParser* parser = new OBJParser();
+    
+    Polymesh* mesh =  parser->parse(file);
+
+    if (!mesh) {
+        delete parser;
+        return -1;
+    }
+    
+    mesh->print();
+    
+    delete mesh;
+    delete parser;  
     
     return 0;
 
