@@ -20,12 +20,12 @@ AllocatioMetrics s_allocation_metrics;
 // Override raw memory block allocation
 // new keyword used operator new under the hood
 void* operator new(size_t size) {
-    std::cout << "Allocating " << size << " bytes" << std::endl;
+    // std::cout << "Allocating " << size << " bytes" << std::endl;
     s_allocation_metrics.bytes_allocated += size;
     return malloc(size);
 }
 void* operator new[](size_t size) {
-    std::cout << "Allocating " << size << " bytes" << std::endl;
+    // std::cout << "Allocating " << size << " bytes" << std::endl;
     s_allocation_metrics.bytes_allocated += size;
     return malloc(size);
 }
@@ -33,12 +33,12 @@ void* operator new[](size_t size) {
 // Override operator delete with size meta-data
 // delete keyword used operator delete under the hood
 void operator delete(void* memory, size_t size) {
-    std::cout << "Deallocating " << size << " bytes" << std::endl;
+    // std::cout << "Deallocating " << size << " bytes" << std::endl;
     s_allocation_metrics.bytes_deallocated += size;
     free(memory);
 }
 void operator delete[](void* memory, size_t size) {
-    std::cout << "Deallocating " << size << " bytes" << std::endl;
+    // std::cout << "Deallocating " << size << " bytes" << std::endl;
     s_allocation_metrics.bytes_deallocated += size;
     free(memory);
 }
@@ -47,13 +47,13 @@ void operator delete[](void* memory, size_t size) {
 // delete keyword used operator delete under the hood
 void operator delete(void* memory) {
     size_t size = _msize(memory);
-    std::cout << "Deallocating " << size << " bytes" << std::endl;
+    // std::cout << "Deallocating " << size << " bytes" << std::endl;
     s_allocation_metrics.bytes_deallocated += size;
     free(memory);
 }
 void operator delete[](void* memory) {
     size_t size = _msize(memory);
-    std::cout << "Deallocating " << size << " bytes" << std::endl;
+    // std::cout << "Deallocating " << size << " bytes" << std::endl;
     s_allocation_metrics.bytes_deallocated += size;
     free(memory);
 }
