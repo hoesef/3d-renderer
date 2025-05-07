@@ -9,6 +9,8 @@
 #include "..\include\allocation_metrics\allocaion_metrics.h"
 #include "..\include\framebuffer\framebuffer.h"
 #include "..\include\framebuffer\linedrawer.h"
+#include "..\include\maths\vector.h"
+#include "..\include\maths\matrix.h"
 
 #define M_PI 3.14159265395f
 // Check the allocation metrics to find signs of a memory leak
@@ -56,6 +58,46 @@ int main() {
 
     fb.plotImage(filename, depth);
 
+    Vector v0(1,2,3);
+    Vector v1(4,5,6);
+    Vector v2;
+
+    std::cout << "v0: " << v0 << "\n";
+    std::cout << "v1: " << v1 << "\n";
+    std::cout << "v2: " << v2 << "\n";
+
+    Matrix4x4 m;
+    std::cout << "m: \n" << m << "\n";
+
+    std::cout << "m + 5:\n" << (m+5) << "\n";
+    std::cout << "m + m:\n" << (m+m) << "\n";
+
+    m = m + 5;
+    m = m - 5;
+    std::cout << "(m + 5) - 5: \n" << ((m+5) - 5) << "\n";
+
+    Matrix4x4 m2 = m + m;
+    m2 = m2 - m;
+    std::cout << "m2 = (m + m) - m:\n" << m2 << "\n";
+    
+    std::cout << "m * 2:\n" << m*2 << "\n";
+
+    v2 = m * v0;
+    std::cout << "v2 = m * v0: " << v2 << "\n";
+
+    Vertex vert(6,7,8,9);
+    vert = m * vert;
+    std::cout << "m * vert: (" << vert.m_x << ", " << vert.m_y << ", " << vert.m_z << ", " << vert.m_w << ")\n";
+
+    m2 = m2 * 8;
+    std::cout << "(m2*8) * m:\n" << m2 << "\n";
+
+    m2 = m2.transpose();
+    std::cout << "m2.T()\n" << m2 << "\n";
+
+    bool s = m2.inverse(m2);
+    if (s) { std::cout << "m2.inverse() successfull: \n" << m2 << "\n"; }
+    
     return 0;
 
 }
