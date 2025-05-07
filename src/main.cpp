@@ -14,6 +14,8 @@
 #include "..\include\parser\obj-parser.h"
 
 #include <string>
+#include "..\include\maths\vector.h"
+#include "..\include\maths\matrix.h"
 
 #define M_PI 3.14159265395f
 // Check the allocation metrics to find signs of a memory leak
