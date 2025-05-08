@@ -2,6 +2,7 @@
 #define PERSPECTIVE_H_
 
 #include "base-camera.h"
+#include "..\maths\vector.h"
 
 class Perspective : public Camera {
 
@@ -10,6 +11,7 @@ class Perspective : public Camera {
         float m_zFar = 1000.0f;         // Far plane
         float m_a = 1.0f;               // Aspect ratio
         float m_fov = 60;               // Field of view
+        Vector pos;
     
     public:
         Matrix4x4 m_proj;               // Perspective Projectio Matrix

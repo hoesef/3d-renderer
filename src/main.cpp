@@ -73,7 +73,7 @@ int main() {
     // Framebuffer instanciation
     Framebuffer fb(width, height);
 
-    const char* file = "../../assets/objects/test.obj";
+    const char* file = "../../assets/objects/cube_ccw.obj";
 
     // obj.print();
     ObjectParser* parser = new OBJParser();

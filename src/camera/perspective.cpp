@@ -32,19 +32,55 @@ Perspective::Perspective(int width, int height, float fov) {
     makeProjMatrix();
 }
 void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
+
+    float r_x = 20 * M_PI / 180;
+    Matrix4x4 rotate_x(1.0f, 0.0f, 0.0f, 0.0f,
+                        0.0f, cos(r_x), -sin(r_x), 0,
+                        0.0f, sin(r_x), cos(r_x), 0, 
+                        0.0f, 0.0f, 0.0f, 1.0f);
+
+    float r_y = 45 * M_PI / 180;
+    Matrix4x4 rotate_y(cos(r_y), 0.0f, sin(r_y), 0.0f,
+                        0.0f, 1.0f, 0.0f, 0.0f,
+                        -sin(r_y), 0.0f, cos(r_y), 1.0f,
+                        0.0f, 0.0f, 0.0f, 1.0f);
+
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
         Vertex v0 = mesh.m_vertices[mesh.m_tris[i].v0];
         Vertex v1 = mesh.m_vertices[mesh.m_tris[i].v1];
         Vertex v2 = mesh.m_vertices[mesh.m_tris[i].v2];
 
-        v0.m_z += 11.0f;
-        v1.m_z += 11.0f;
-        v2.m_z += 11.0f;
+        v0 = rotate_x * v0;
+        v1 = rotate_x * v1;
+        v2 = rotate_x * v2;
+
+        v0 = rotate_y * v0;
+        v1 = rotate_y * v1;
+        v2 = rotate_y * v2;
+
+        float offset = 25.0f;
+        v0.m_z += offset;
+        v1.m_z += offset;
+        v2.m_z += offset;
 
         // if w!=1 and w!=0, divide by w
         homogenize(v0);
         homogenize(v1);
         homogenize(v2);
+
+        Vector normal, line1, line2;
+        line1.m_x = v1.m_x - v0.m_x;
+        line1.m_y = v1.m_y - v0.m_y;
+        line1.m_z = v1.m_z - v0.m_z;
+
+        line2.m_x = v2.m_x - v0.m_x;
+        line2.m_y = v2.m_y - v0.m_y;
+        line2.m_z = v2.m_z - v0.m_z;
+
+        normal = line1.cross(line2);
+        normal.normalize();
+        
+        if (normal.dot(Vector(v0.m_x - pos.m_x, v0.m_y - pos.m_y, v0.m_z -  pos.m_z)) >= 0) { continue; }
 
         v0 = m_proj * v0;
         v1 = m_proj * v1;
@@ -58,7 +94,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         // Convert to NCD, then scale to actual image
         float scaleX = 0.5f * m_width;
         float scaleY = 0.5f * m_height;
-        v0.m_x = (v0.m_x + 1.0f) * scaleX; v0.m_y = (1.0f - v1.m_y) * scaleY;
+        v0.m_x = (v0.m_x + 1.0f) * scaleX; v0.m_y = (1.0f - v0.m_y) * scaleY;
         v1.m_x = (v1.m_x + 1.0f) * scaleX; v1.m_y = (1.0f - v1.m_y) * scaleY;
         v2.m_x = (v2.m_x + 1.0f) * scaleX; v2.m_y = (1.0f - v2.m_y) * scaleY;
 
@@ -71,7 +107,6 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y);
         drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
         drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
-        
     }
 }
 void Perspective::makeProjMatrix() {
