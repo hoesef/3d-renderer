@@ -77,16 +77,13 @@ Polymesh* OBJParser::parse(const char* filename) {
             std::vector<std::string> segs;
             std::vector<unsigned int> v;
             while (iss >> seg) {
-                std::cout << "\n\n" << seg << "\n";
                 std::stringstream s(seg);
                 unsigned int x = 0;
                 s >> x;
-                std::cout << "x: " << x << "\n";
                 v.push_back(x);
             }
-            std::cout << "Len v: " << v.size();
             for (int i = 1; i < v.size()-1; i++) {
-                Triangle t{v[0], v[i], v[i+1]};
+                Triangle t{v[0] - 1, v[i] - 1, v[i+1] - 1};
                 mesh->m_tris.push_back(t);
                 mesh->m_tri_count++;
             }
