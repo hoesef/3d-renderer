@@ -17,7 +17,12 @@
 #include "..\include\maths\vector.h"
 #include "..\include\maths\matrix.h"
 
-#define M_PI 3.14159265395f
+#include "..\include\camera\perspective.h"
+
+#ifndef M_PI
+#define M_PI 3.1415926535f
+#endif
+
 // Check the allocation metrics to find signs of a memory leak
 void detect_mem_leak() {
     size_t size = s_allocation_metrics.getCurrentMemory();
@@ -32,15 +37,15 @@ void detect_mem_leak() {
     std::cout << "------------------------------------------------------" << std::endl;
 }
 
-void radial_lines(Framebuffer* fb, float inc = 64.0f) {
-    for (uint32_t y = 0; y < fb->m_height; y++) {
-        for (uint32_t x = 0; x < fb->m_width; x++) {
-            fb->setPixel(x, y, (float)x/fb->m_width, (float)y/fb->m_height, 0.0f);//((float)x+y)/(fb->m_width+fb->m_height));
-            fb->setDepth(x, y, (float)x);
+void radial_lines(Framebuffer& fb, float inc = 64.0f) {
+    for (uint32_t y = 0; y < fb.m_height; y++) {
+        for (uint32_t x = 0; x < fb.m_width; x++) {
+            fb.setPixel(x, y, (float)x/fb.m_width, (float)y/fb.m_height, 0.0f);//((float)x+y)/(fb->m_width+fb->m_height));
+            fb.setDepth(x, y, (float)x);
         }
     }
 
-    drawline(*fb, 400, 300, 400, 300);
+    drawline(fb, 400, 300, 400, 300);
     
     for (float i = 0; i < M_PI * 2; i += M_PI /inc)
     {
@@ -49,7 +54,7 @@ void radial_lines(Framebuffer* fb, float inc = 64.0f) {
         float y = sin(i);
 
         // draw a line
-        drawline(*fb, 400 + (int)(48.0f*x), 300 + (int)(48.0f*y), 400 + (int)(240.0f*x), 300 + (int)(240.0f*y));
+        drawline(fb, 400 + (int)(48.0f*x), 300 + (int)(48.0f*y), 400 + (int)(240.0f*x), 300 + (int)(240.0f*y));
     }
 }
 
@@ -58,24 +63,17 @@ int main() {
     // Run memory leak detection before program termination
     std::atexit(detect_mem_leak);
 
+    int width = 800;
+    int height = 600;
+
     // Names of images to create
     const char* filename = "../../images/test.ppm";
     const char* depth = "../../images/test_depth.ppm";
 
     // Framebuffer instanciation
-    Framebuffer fb(800, 600);
-    radial_lines(&fb);
+    Framebuffer fb(width, height);
 
-    bool success = true;
     const char* file = "../../assets/objects/test.obj";
-    // Polymesh obj(file, success);
-
-    std::cout << "Success: " << (success?"true":"false") << "\n";
-
-    if (!success) { 
-        return -1; }
-
-    fb.plotImage(filename, depth);
 
     // obj.print();
     ObjectParser* parser = new OBJParser();
@@ -87,10 +85,18 @@ int main() {
         return -1;
     }
     
-    mesh->print();
+    // mesh->print();
+
+    Camera* camera = new Perspective(width, height, 90);
     
+    camera->render(*mesh, fb);
+    
+    delete camera;
     delete mesh;
     delete parser;  
+
+    int s = fb.plotImage(filename, depth);
+    std::cout << (s==0?"success":"fail") << "\n";
     
     return 0;
 
