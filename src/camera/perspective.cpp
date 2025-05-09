@@ -63,11 +63,6 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v1.m_z += offset;
         v2.m_z += offset;
 
-        // if w!=1 and w!=0, divide by w
-        homogenize(v0);
-        homogenize(v1);
-        homogenize(v2);
-
         Vector normal, line1, line2;
         line1.m_x = v1.m_x - v0.m_x;
         line1.m_y = v1.m_y - v0.m_y;
