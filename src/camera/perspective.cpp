@@ -27,13 +27,13 @@ Perspective::Perspective() { makeProjMatrix(); }
 Perspective::Perspective(int width, int height, float fov) {
     m_width = width;
     m_height = height;
-    m_a = (float)height / (float)width;
+    m_a = (float)width / (float)height;
     m_fov = fov;
     makeProjMatrix();
 }
 void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
-    float r_x = 20 * M_PI / 180;
+    float r_x = 90 * M_PI / 180;
     Matrix4x4 rotate_x(1.0f, 0.0f, 0.0f, 0.0f,
                         0.0f, cos(r_x), -sin(r_x), 0,
                         0.0f, sin(r_x), cos(r_x), 0, 
@@ -42,7 +42,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
     float r_y = 45 * M_PI / 180;
     Matrix4x4 rotate_y(cos(r_y), 0.0f, sin(r_y), 0.0f,
                         0.0f, 1.0f, 0.0f, 0.0f,
-                        -sin(r_y), 0.0f, cos(r_y), 1.0f,
+                        -sin(r_y), 0.0f, cos(r_y), 0.0f,
                         0.0f, 0.0f, 0.0f, 1.0f);
 
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
@@ -58,7 +58,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v1 = rotate_y * v1;
         v2 = rotate_y * v2;
 
-        float offset = 25.0f;
+        float offset = 2.0f;
         v0.m_z += offset;
         v1.m_z += offset;
         v2.m_z += offset;
@@ -106,12 +106,18 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 }
 void Perspective::makeProjMatrix() {
     float f = 1 / tanf(m_fov * 0.5f * M_PI / 180);
-    float q = m_zFar / (m_zFar - m_zNear);
+    // float q = m_zFar / (m_zFar - m_zNear);
+
+    // m_proj = Matrix4x4(
+    //     m_a * f, 0, 0, 0,
+    //     0, f, 0, 0,
+    //     0, 0, q, 1,
+    //     0, 0, -m_zNear * q, 0);
 
     m_proj = Matrix4x4(
-        m_a * f, 0, 0, 0,
-        0, f, 0, 0,
-        0, 0, q, 1,
-        0, 0, -m_zNear * q, 0);
+        f / m_a, 0, 0, 0,
+              0, f, 0, 0,
+              0, 0, (m_zFar + m_zNear)/(m_zNear - m_zFar), (2 * m_zFar * m_zNear)/(m_zNear-m_zFar),
+              0, 0, -1, 0);
 }
 Perspective::~Perspective() {}
