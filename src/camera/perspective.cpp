@@ -33,18 +33,6 @@ Perspective::Perspective(int width, int height, float fov) {
 }
 void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
-    float r_x = 231 * M_PI / 180;
-    Matrix4x4 rotate_x(1.0f, 0.0f, 0.0f, 0.0f,
-                        0.0f, cos(r_x), -sin(r_x), 0,
-                        0.0f, sin(r_x), cos(r_x), 0, 
-                        0.0f, 0.0f, 0.0f, 1.0f);
-
-    float r_y = 231 * M_PI / 180;
-    Matrix4x4 rotate_y(cos(r_y), 0.0f, sin(r_y), 0.0f,
-                        0.0f, 1.0f, 0.0f, 0.0f,
-                        -sin(r_y), 0.0f, cos(r_y), 0.0f,
-                        0.0f, 0.0f, 0.0f, 1.0f);
-
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
         // Get vertex data
         Vertex v0 = mesh.m_vertices[mesh.m_tris[i].v0];
@@ -52,14 +40,10 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         Vertex v2 = mesh.m_vertices[mesh.m_tris[i].v2];
 
         // Position vertex (temporary, will be moved to object.applyTransform)
-        v0 = (rotate_x * rotate_y) * v0;
-        v1 = (rotate_x * rotate_y) * v1;
-        v2 = (rotate_x * rotate_y) * v2;
-
-        float offset = 2.0f;
-        v0.m_z += offset;
-        v1.m_z += offset;
-        v2.m_z += offset;
+        Matrix4x4 transform = mesh.getTransform();
+        v0 = transform * v0;
+        v1 = transform * v1;
+        v2 = transform * v2;
 
         // Get surface normal
         Vector normal, line1, line2;

@@ -73,12 +73,24 @@ int main() {
     // Framebuffer instanciation
     Framebuffer fb(width, height);
 
-    const char* file = "../../assets/objects/cube_ccw.obj";
+    const char* file = "../../assets/objects/teapot.obj";
 
     // obj.print();
     ObjectParser* parser = new OBJParser();
     
     Polymesh* mesh =  parser->parse(file);
+
+    // mesh->scale(4, 3, 1);
+    // mesh->rotate(231, 231, 50);
+    // mesh->translate(Vector(1, 1.5, 7));
+    mesh->translate(-2.5, 5, 20);
+    mesh->rotate(90, 0, 0);
+
+    // std::cout << "Offset: " << mesh->m_transform_data.offset << "\n"
+    //           << "rotation: x(" << mesh->m_transform_data.rotate_x << ") y(" << mesh->m_transform_data.rotate_y << ") z("
+    //           << mesh->m_transform_data.rotate_z << ")\n"
+    //           << "scale: x(" << mesh->m_transform_data.scale_x << ") y(" << mesh->m_transform_data.scale_y << ") z("
+    //           << mesh->m_transform_data.scale_z << ")\n";
 
     if (!mesh) {
         delete parser;
