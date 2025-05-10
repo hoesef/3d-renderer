@@ -1,4 +1,5 @@
 #include "../../include/maths/vector.h"
+#include "../../include/maths/vertex.h"
 
 #include <math.h>
 
@@ -99,6 +100,10 @@ Vector Vector::cross(const Vector& other) {
 std::ostream& operator<<(std::ostream& os, const Vector& v) {
     os << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ")";
     return os;
+}
+// Convert to Vertex
+Vertex Vector::toVertex() {
+    return Vertex(m_x, m_y, m_z, 0);
 }
 // Destructor
 Vector::~Vector() {}

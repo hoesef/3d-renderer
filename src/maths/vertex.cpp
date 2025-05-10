@@ -1,4 +1,5 @@
 #include "../../include/maths/vertex.h"
+#include "../../include/maths/vector.h"
 
 // Constructor
 Vertex::Vertex() {}
@@ -57,6 +58,21 @@ Vertex& Vertex::operator=(Vertex&& other) {
     }   
 
     return *this;
+}
+
+// Addition
+Vertex Vertex::operator+(Vertex& other) {
+    return Vertex(m_x + other.m_x, m_y + other.m_y, m_z + other.m_z);
+}
+
+// Subtraction (distance from one to another)
+Vector Vertex::operator-(Vertex& other) {
+    return Vector(m_x - other.m_x, m_y - other.m_y, m_z - other.m_z);
+}
+
+// Convert to a Vector
+Vector Vertex::toVector() {
+    return Vector(m_x, m_y, m_z);
 }
 
 // Destructor
