@@ -1,6 +1,11 @@
 #ifndef VERTEX_H_
 #define VERTEX_H_
 
+#include <iostream>
+
+// Forward decloration of vector
+class Vector;
+
 class Vertex {
 
     public:
@@ -22,7 +27,13 @@ class Vertex {
         Vertex& operator=(const Vertex& other);
         // Move operator
         Vertex& operator=(Vertex&&other);
-        // Apply transform
+        // Addition
+        Vertex operator+(Vertex& other);
+        // Subtraction (distance from one to the other)
+        Vector operator-(Vertex& other);
+        // Convert to a vector
+        Vector toVector();
+        friend std::ostream& operator<<(std::ostream& os, const Vertex& v);
         // Destructor
         ~Vertex();
 

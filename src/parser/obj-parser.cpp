@@ -39,6 +39,16 @@ Polymesh* OBJParser::parse(const char* filename) {
             if (!(iss >> w)) {
                 w = 1.0f;
             }
+            if (w == 0) {
+                std::cerr << "Warning: vertex has w=0 (point at infinity). Replacing with fallback value (w=1)\n";
+                w = 1.0f;
+            }
+            if (w != 1) {
+                x = x/w;
+                y = y/w;
+                z = z/w;
+                w = 1;
+            }
             // Add vertex to vertex list
             mesh->m_vertices.push_back(Vertex(x,y,z,w));
             mesh->m_vertex_count++;
@@ -77,16 +87,13 @@ Polymesh* OBJParser::parse(const char* filename) {
             std::vector<std::string> segs;
             std::vector<unsigned int> v;
             while (iss >> seg) {
-                std::cout << "\n\n" << seg << "\n";
                 std::stringstream s(seg);
                 unsigned int x = 0;
                 s >> x;
-                std::cout << "x: " << x << "\n";
                 v.push_back(x);
             }
-            std::cout << "Len v: " << v.size();
             for (int i = 1; i < v.size()-1; i++) {
-                Triangle t{v[0], v[i], v[i+1]};
+                Triangle t{v[0] - 1, v[i] - 1, v[i+1] - 1};
                 mesh->m_tris.push_back(t);
                 mesh->m_tri_count++;
             }

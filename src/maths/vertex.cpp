@@ -1,23 +1,17 @@
 #include "../../include/maths/vertex.h"
-
-#include <iostream>
+#include "../../include/maths/vector.h"
 
 // Constructor
-Vertex::Vertex() {
-    std::cout << "Default contstructor\n";
-}
+Vertex::Vertex() {}
 Vertex::Vertex(float x, float y, float z) {
     m_x=x, m_y=y, m_z=z;
-    std::cout << "xyz contstructor\n";
 }
 Vertex::Vertex(float x, float y, float z, float w) {
-    std::cout << "xyzw contstructor\n";
     m_x=x, m_y=y, m_z=z, m_w=w;
 }
 
 // Copy Constructor
 Vertex::Vertex(const Vertex& other) {
-    std::cout << "copy constructor\n";
     m_x = other.m_x;
     m_y = other.m_y;
     m_z = other.m_z;
@@ -26,7 +20,6 @@ Vertex::Vertex(const Vertex& other) {
 
 // Move constructor
 Vertex::Vertex(Vertex&& other) {
-    std::cout << "move constructor\n";
     m_x = other.m_x;
     m_y = other.m_y;
     m_z = other.m_z;
@@ -40,7 +33,6 @@ Vertex::Vertex(Vertex&& other) {
 
 // Assignment operator
 Vertex& Vertex::operator=(const Vertex& other) {
-    std::cout << "assignment operator\n";
     if (this != &other) {
         m_x = other.m_x;
         m_y = other.m_y;
@@ -53,7 +45,6 @@ Vertex& Vertex::operator=(const Vertex& other) {
 
 // Move operator
 Vertex& Vertex::operator=(Vertex&& other) {
-    std::cout << "move operator\n";
     if (this != &other) {
         m_x = other.m_x;
         m_y = other.m_y;
@@ -67,6 +58,26 @@ Vertex& Vertex::operator=(Vertex&& other) {
     }   
 
     return *this;
+}
+
+// Addition
+Vertex Vertex::operator+(Vertex& other) {
+    return Vertex(m_x + other.m_x, m_y + other.m_y, m_z + other.m_z);
+}
+
+// Subtraction (distance from one to another)
+Vector Vertex::operator-(Vertex& other) {
+    return Vector(m_x - other.m_x, m_y - other.m_y, m_z - other.m_z);
+}
+
+// Convert to a Vector
+Vector Vertex::toVector() {
+    return Vector(m_x, m_y, m_z);
+}
+
+std::ostream& operator<<(std::ostream& os, const Vertex& v) {
+    os << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z <<  ", " << v.m_w << ")";
+    return os;
 }
 
 // Destructor
