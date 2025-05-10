@@ -125,11 +125,16 @@ Vertex Matrix4x4::operator*(const Vertex& v) {
     return Vertex(x, y, z, w);
 }
 Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) {
-    return Matrix4x4(
-        m_mat[0]  * other.m_mat[0],  m_mat[1]  * other.m_mat[1],  m_mat[2]  * other.m_mat[2],  m_mat[3]  * other.m_mat[3],
-        m_mat[4]  * other.m_mat[4],  m_mat[5]  * other.m_mat[5],  m_mat[6]  * other.m_mat[6],  m_mat[7]  * other.m_mat[7],
-        m_mat[8]  * other.m_mat[8],  m_mat[9]  * other.m_mat[9],  m_mat[10] * other.m_mat[10], m_mat[11] * other.m_mat[11],
-        m_mat[12] * other.m_mat[12], m_mat[13] * other.m_mat[13], m_mat[14] * other.m_mat[14], m_mat[15] * other.m_mat[15]);
+    Matrix4x4 result;
+    for (int row = 0; row < 4; ++row) {
+        for (int col = 0; col < 4; ++col) {
+            result.m_mat[col * 4 + row] = 0.0f;
+            for (int k = 0; k < 4; ++k) {
+                result.m_mat[col * 4 + row] += m_mat[k * 4 + row] * other.m_mat[col * 4 + k];
+            }
+        }
+    }
+    return result;
 }
 // Transpose
 Matrix4x4 Matrix4x4::transpose() {

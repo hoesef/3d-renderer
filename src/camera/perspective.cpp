@@ -52,13 +52,9 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         Vertex v2 = mesh.m_vertices[mesh.m_tris[i].v2];
 
         // Position vertex (temporary, will be moved to object.applyTransform)
-        v0 = rotate_x * v0;
-        v1 = rotate_x * v1;
-        v2 = rotate_x * v2;
-
-        v0 = rotate_y * v0;
-        v1 = rotate_y * v1;
-        v2 = rotate_y * v2;
+        v0 = (rotate_x * rotate_y) * v0;
+        v1 = (rotate_x * rotate_y) * v1;
+        v2 = (rotate_x * rotate_y) * v2;
 
         float offset = 2.0f;
         v0.m_z += offset;
@@ -106,7 +102,6 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 }
 void Perspective::makeProjMatrix() {
     float f = 1 / tanf(m_fov * 0.5f * M_PI / 180);
-
     m_proj = Matrix4x4(
         f / m_a, 0, 0, 0,
               0, f, 0, 0,

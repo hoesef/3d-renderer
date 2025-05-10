@@ -45,9 +45,9 @@ class Vector {
         float dot(const Vector& other);
         // Cross product
         Vector cross(const Vector& other);
-        friend std::ostream& operator<<(std::ostream& os, const Vector& v);
         // Convert to Vertex
         Vertex toVertex();
+        friend std::ostream& operator<<(std::ostream& os, const Vector& v);
         // Destructor
         ~Vector();
 

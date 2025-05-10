@@ -75,5 +75,10 @@ Vector Vertex::toVector() {
     return Vector(m_x, m_y, m_z);
 }
 
+std::ostream& operator<<(std::ostream& os, const Vertex& v) {
+    os << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z <<  ", " << v.m_w << ")";
+    return os;
+}
+
 // Destructor
 Vertex::~Vertex() {}

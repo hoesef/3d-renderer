@@ -97,13 +97,13 @@ Vector Vector::cross(const Vector& other) {
                   m_z * other.m_x - m_x * other.m_z,
                   m_x * other.m_y - m_y * other.m_x);
 }
-std::ostream& operator<<(std::ostream& os, const Vector& v) {
-    os << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ")";
-    return os;
-}
 // Convert to Vertex
 Vertex Vector::toVertex() {
     return Vertex(m_x, m_y, m_z, 0);
+}
+std::ostream& operator<<(std::ostream& os, const Vector& v) {
+    os << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ")";
+    return os;
 }
 // Destructor
 Vector::~Vector() {}
