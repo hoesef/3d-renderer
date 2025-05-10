@@ -33,23 +33,25 @@ Perspective::Perspective(int width, int height, float fov) {
 }
 void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
-    float r_x = 90 * M_PI / 180;
+    float r_x = 231 * M_PI / 180;
     Matrix4x4 rotate_x(1.0f, 0.0f, 0.0f, 0.0f,
                         0.0f, cos(r_x), -sin(r_x), 0,
                         0.0f, sin(r_x), cos(r_x), 0, 
                         0.0f, 0.0f, 0.0f, 1.0f);
 
-    float r_y = 45 * M_PI / 180;
+    float r_y = 231 * M_PI / 180;
     Matrix4x4 rotate_y(cos(r_y), 0.0f, sin(r_y), 0.0f,
                         0.0f, 1.0f, 0.0f, 0.0f,
                         -sin(r_y), 0.0f, cos(r_y), 0.0f,
                         0.0f, 0.0f, 0.0f, 1.0f);
 
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
+        // Get vertex data
         Vertex v0 = mesh.m_vertices[mesh.m_tris[i].v0];
         Vertex v1 = mesh.m_vertices[mesh.m_tris[i].v1];
         Vertex v2 = mesh.m_vertices[mesh.m_tris[i].v2];
 
+        // Position vertex (temporary, will be moved to object.applyTransform)
         v0 = rotate_x * v0;
         v1 = rotate_x * v1;
         v2 = rotate_x * v2;
@@ -63,20 +65,18 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v1.m_z += offset;
         v2.m_z += offset;
 
+        // Get surface normal
         Vector normal, line1, line2;
-        line1.m_x = v1.m_x - v0.m_x;
-        line1.m_y = v1.m_y - v0.m_y;
-        line1.m_z = v1.m_z - v0.m_z;
-
-        line2.m_x = v2.m_x - v0.m_x;
-        line2.m_y = v2.m_y - v0.m_y;
-        line2.m_z = v2.m_z - v0.m_z;
+        line1 = v1 - v0;
+        line2 = v2 - v0;
 
         normal = line1.cross(line2);
         normal.normalize();
         
-        if (normal.dot(Vector(v0.m_x - pos.m_x, v0.m_y - pos.m_y, v0.m_z -  pos.m_z)) >= 0) { continue; }
+        // Check if face is towards camera
+        if (normal.dot(v0.toVector() - pos) >= 0) { continue; }
 
+        // Project face to canvas
         v0 = m_proj * v0;
         v1 = m_proj * v1;
         v2 = m_proj * v2;
@@ -106,13 +106,6 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 }
 void Perspective::makeProjMatrix() {
     float f = 1 / tanf(m_fov * 0.5f * M_PI / 180);
-    // float q = m_zFar / (m_zFar - m_zNear);
-
-    // m_proj = Matrix4x4(
-    //     m_a * f, 0, 0, 0,
-    //     0, f, 0, 0,
-    //     0, 0, q, 1,
-    //     0, 0, -m_zNear * q, 0);
 
     m_proj = Matrix4x4(
         f / m_a, 0, 0, 0,
