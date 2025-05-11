@@ -101,8 +101,8 @@ void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2) {
 
     Vertex p;
 
-    for (uint32_t y = y_min; y < y_max; y++) {
-        for (uint32_t x = x_min; x  < x_max; x++) {
+    for (uint32_t y = y_min; y <= y_max; y++) {
+        for (uint32_t x = x_min; x  <= x_max; x++) {
             p.m_x = (float)x; p.m_y = (float)y;
             if (pointInTriangle(v0, v1, v2, p)) {
                 fb.setPixel(x, y, 1.0f, 1.0f, 1.0f);

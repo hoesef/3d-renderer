@@ -1,4 +1,12 @@
+#include <math.h>
+
 #include "..\..\include\maths\matrix.h"
+
+#ifndef M_PI
+#define M_PI 3.1415926535f
+#endif
+
+#define RADIAN(x) (x * M_PI / 180) 
 
 // Constructor
 Matrix4x4::Matrix4x4() {
@@ -287,3 +295,42 @@ std::ostream& operator<<(std::ostream& os, const Matrix4x4& m) {
 }
 // Destructor
 Matrix4x4::~Matrix4x4() {}
+
+
+Matrix4x4 translationMatrix(const Vector& offset) {
+    return Matrix4x4(1, 0, 0, offset.m_x,
+                     0, 1, 0, offset.m_y,
+                     0, 0, 1, offset.m_z,
+                     0, 0, 0, 1);
+}
+
+Matrix4x4 rotationMatrixX(float x) {
+    float cosX = cosf(RADIAN(x));
+    float sinX = sinf(RADIAN(x));
+    return Matrix4x4(1, 0, 0, 0,
+                     0, cosX, -sinX, 0,
+                     0, sinX, cosX, 0,
+                     0, 0, 0, 1);
+}
+Matrix4x4 rotationMatrixY(float y) {
+    float cosY = cosf(RADIAN(y));
+    float sinY = sinf(RADIAN(y));
+    return Matrix4x4(cosY, 0, sinY, 0,
+                        0, 1, 0, 0,
+                     -sinY, 0, cosY, 0,
+                        0, 0, 0, 1);
+}
+Matrix4x4 rotationMatrixZ(float z) {
+    float cosZ = cosf(RADIAN(z));
+    float sinZ = sinf(RADIAN(z));
+    return Matrix4x4(cosZ, -sinZ, 0, 0,
+                     sinZ, cosZ, 0, 0,
+                     0, 0, 1, 0,
+                    0, 0, 0, 1);
+}
+Matrix4x4 scaleMatrix(float x, float y, float z) {
+    return Matrix4x4(x, 0, 0, 0,
+                     0, y, 0, 0,
+                     0, 0, z, 0,
+                     0, 0, 0, 1);
+}

@@ -43,4 +43,10 @@ class Matrix4x4 {
 
 };
 
+Matrix4x4 translationMatrix(const Vector& offset);
+Matrix4x4 rotationMatrixX(float alpha);
+Matrix4x4 rotationMatrixY(float alpha);
+Matrix4x4 rotationMatrixZ(float alpha);
+Matrix4x4 scaleMatrix(float x, float y, float z);
+
 #endif
