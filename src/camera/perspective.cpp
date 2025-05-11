@@ -95,9 +95,11 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v2.m_x = min(max(0.0f, v2.m_x), (float)m_width); v2.m_y = min(max(0.0f, v2.m_y), (float)m_height);
 
         // Drawline
-        drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y);
-        drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
-        drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
+        // drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y);
+        // drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
+        // drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
+        // drawTriangle(fb, v0, v1, v2);
+        fillTriangle(fb, v0, v1, v2);
     }
 }
 void Perspective::makeProjMatrix() {

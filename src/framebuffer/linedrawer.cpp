@@ -2,14 +2,16 @@
 
 #include "../../include/framebuffer/framebuffer.h"
 #include "../../include/framebuffer/linedrawer.h"
+#include "../../include/maths/vertex.h"
+#include "../../include/maths/vector.h"
 
 // Return the absolute value of a number
-uint32_t abs(int num) {
+uint32_t absi(int num) {
     return -num * (num < 0) + num * (num > 0);
 }
 
 void drawline(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1) {
-    if (abs(x1-x0) > abs(y1-y0)) {
+    if (absi(x1-x0) > absi(y1-y0)) {
         // Horizontal
         drawlineH(fb, x0, y0, x1, y1);
     } else {
@@ -76,4 +78,54 @@ void drawlineV(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t 
         }
         p += 2*dx;
     }
+}
+
+// void drawTriangle(Framebuffer& fb, float x0, float y0, float x1, float y1, float x2, float y2) {
+//     drawline(fb, (uint32_t)x0, (uint32_t)y0, (uint32_t)x1, (uint32_t)y1);
+//     drawline(fb, (uint32_t)x0, (uint32_t)y0, (uint32_t)x2, (uint32_t)y2);
+//     drawline(fb, (uint32_t)x1, (uint32_t)y1, (uint32_t)x2, (uint32_t)y2);
+// }
+
+void drawTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2) {
+    drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y);
+    drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
+    drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
+}
+
+void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2) {
+    uint32_t x_max = (uint32_t)std::max(std::max(v0.m_x, v1.m_x), v2.m_x);
+    uint32_t y_max = (uint32_t)std::max(std::max(v0.m_y, v1.m_y), v2.m_y);
+
+    uint32_t x_min = (uint32_t)std::min(std::min(v0.m_x, v1.m_x), v2.m_x);
+    uint32_t y_min = (uint32_t)std::min(std::min(v0.m_y, v1.m_y), v2.m_y);
+
+    Vertex p;
+
+    for (uint32_t y = y_min; y < y_max; y++) {
+        for (uint32_t x = x_min; x  < x_max; x++) {
+            p.m_x = (float)x; p.m_y = (float)y;
+            if (pointInTriangle(v0, v1, v2, p)) {
+                fb.setPixel(x, y, 1.0f, 1.0f, 1.0f);
+            }
+        }
+    }
+}
+
+bool pointInTriangle(Vertex& A, Vertex& B, Vertex& C, Vertex& P) {
+    Vector v0 = C - A;
+    Vector v1 = B - A;
+    Vector v2 = P - A;
+
+    float dot00 = v0.dot(v0);
+    float dot01 = v0.dot(v1);
+    float dot02 = v0.dot(v2);
+    float dot11 = v1.dot(v1);
+    float dot12 = v1.dot(v2);
+
+    float denom = dot00 * dot11 - dot01 * dot01;
+    float u = (dot11 * dot02 - dot01 * dot12) / denom;
+    float v = (dot00 * dot12 - dot01 * dot02) / denom;
+
+    return ((u >= 0) && (v >= 0) && (u+v<=1));
+
 }
