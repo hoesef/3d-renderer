@@ -5,58 +5,90 @@ void Transform::rotate(float x, float y, float z) {
     rotate_x += x;
     rotate_y += y;
     rotate_z += z;
-    dirty = true;
+    dirty_rotate = true;
+    dirty_transform = true;
 }
 void Transform::rotateX(float x) {
     rotate_x += x;
-    dirty = true;
+    dirty_rotate = true;
+    dirty_transform = true;
 }
 void Transform::rotateY(float y) {
     rotate_y += y;
-    dirty = true;
+    dirty_rotate = true;
+    dirty_transform = true;
 }
 void Transform::rotateZ(float z) {
     rotate_z += z;
-    dirty = true;
+    dirty_rotate = true;
+    dirty_transform = true;
 }
 // Offset
 void Transform::translate(const Vector& v) {
     offset += v;
-    dirty = true;
+    dirty_offset = true;
+    dirty_transform = true;
 }
 void Transform::translate(float x, float y, float z) {
     offset.m_x += x;
     offset.m_y += y;
     offset.m_z += z;
-    dirty = true;
+    dirty_offset = true;
+    dirty_transform = true;
 }
 // Scale
 void Transform::scale(float x, float y, float z) {
     scale_x *= x;
     scale_y *= y;
     scale_z *= z;
-    dirty = true;
+    dirty_scale = true;
+    dirty_transform = true;
 }
 void Transform::scaleX(float x) {
     scale_x *= x;
-    dirty = true;
+    dirty_scale = true;
+    dirty_transform = true;
 }
 void Transform::scaleY(float y) {
     scale_y *= y;
-    dirty = true;
+    dirty_scale = true;
+    dirty_transform = true;
 }
 void Transform::scaleZ(float z) {
     scale_z *= z;
-    dirty = true;
+    dirty_scale = true;
+    dirty_transform = true;
 }
 // Get transform
+const Matrix4x4 Transform::getRotation() {
+    if (dirty_rotate) {
+        m_rotation = rotationMatrixX(rotate_x) * rotationMatrixY(rotate_y) * rotationMatrixZ(rotate_z);
+        // m_rotation = rotationMatrixZ(rotate_z) * rotationMatrixY(rotate_y) * rotationMatrixX(rotate_x);
+        dirty_rotate = false;
+    }
+    return m_rotation;
+}
+const Matrix4x4 Transform::getOffset() {
+    if (dirty_offset) {
+        m_translation = translationMatrix(offset);
+        dirty_offset = false;
+    }
+    return m_translation;
+}
+const Matrix4x4 Transform::getScale() {
+    if (dirty_scale) {
+        m_scale = scaleMatrix(scale_x, scale_y, scale_z);
+        dirty_scale = false;
+    }
+    return m_scale;
+}
 const Matrix4x4 Transform::get() {
-    if (dirty) {
-        Matrix4x4 T = translationMatrix(offset);
-        Matrix4x4 R = rotationMatrixX(rotate_x) * rotationMatrixY(rotate_y) * rotationMatrixZ(rotate_z);
-        Matrix4x4 S = scaleMatrix(scale_x, scale_y, scale_z);
+    if (dirty_transform) {
+        Matrix4x4 T = getOffset();
+        Matrix4x4 R = getRotation();
+        Matrix4x4 S = getScale();
         transform = T * R * S;
-        dirty = false;
+        dirty_transform = false;
     }
     return transform;
 }
@@ -69,5 +101,5 @@ void Transform::reset() {
     scale_x = 1.0f;
     scale_y = 1.0f;
     scale_z = 1.0f;
-    dirty = true;
+    dirty_transform = true;
 }

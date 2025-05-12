@@ -11,16 +11,22 @@ class Transform {
         float rotate_x = 0.0f;
         float rotate_y = 0.0f;
         float rotate_z = 0.0f;
+        bool dirty_rotate = true;
         // Offser
         Vector offset;
+        bool dirty_offset = true;
         // Scale
         float scale_x = 1.0f;
         float scale_y = 1.0f;
         float scale_z = 1.0f;
+        bool dirty_scale = true;
         // Transform matrix
+        Matrix4x4 m_rotation;
+        Matrix4x4 m_translation;
+        Matrix4x4 m_scale;
         Matrix4x4 transform;
         // Dirty transform flag
-        bool dirty = false;
+        bool dirty_transform = true;
 
     public:
         // Constructor
@@ -44,8 +50,11 @@ class Transform {
         void reset();
         // Destructor
         ~Transform() {}
-
-
+    
+    private:
+        const Matrix4x4 getRotation();
+        const Matrix4x4 getOffset();
+        const Matrix4x4 getScale();
 
 };
 

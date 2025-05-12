@@ -1,5 +1,5 @@
-#ifndef BASE_CAMERA_H_
-#define BASE_CAMERA_H_
+#ifndef BASE_RENDERER_H_
+#define BASE_RENDERER_H_
 
 #include "..\objects\polymesh.h"
 #include "..\framebuffer\framebuffer.h"
