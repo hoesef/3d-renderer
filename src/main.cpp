@@ -71,7 +71,7 @@ int main() {
         return -1;
     }
     
-    Camera* camera = new Perspective(width, height, 90);
+    Camera* camera = new Perspective(2, height, 90);
     
     camera->render(*mesh, fb);
     

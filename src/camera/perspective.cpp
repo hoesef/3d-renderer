@@ -33,6 +33,16 @@ Perspective::Perspective(int width, int height, float fov) {
 }
 void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
+    // Check framebuffer and camera are using the same dimensions
+    // Probably just temporary, there may be a reason why you'd want them to be different?
+    if (m_width != fb.m_width || m_height != m_height) {
+        std::cout << "Framebuffer is not the same size as camera screen. Using framebuffer values\n";
+        m_width = fb.m_width;
+        m_height = fb.m_height;
+        m_a = (float)m_height / (float)m_width;
+        makeProjMatrix();
+    }
+
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
         // Get vertex data
         Vertex v0 = mesh.m_vertices[mesh.m_tris[i].v0];

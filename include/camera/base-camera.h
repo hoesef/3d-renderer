@@ -8,7 +8,7 @@
 class Camera {
 
     protected:
-        int m_width, m_height = 400;
+        unsigned m_width, m_height = 400;
 
     public:
         Camera() = default;
