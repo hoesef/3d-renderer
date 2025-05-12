@@ -7,6 +7,8 @@
 #include "..\maths\vector.h"
 #include "..\maths\matrix.h"
 
+#include "..\framebuffer\framebuffer.h"
+
 struct Triangle {
     unsigned int v0 = 0;
     unsigned int v1 = 0;
@@ -35,6 +37,7 @@ struct TransformData {
 class Polymesh {
 
     private:
+        Colour m_col;
         Matrix4x4 m_transform;
         bool m_dirty_transform = false;
         // Material material
@@ -57,6 +60,8 @@ class Polymesh {
 
     public:
         Polymesh() {};
+        void setColour(Colour c);
+        Colour getColour();
         void print();
         // Rotation
         void rotate(float x, float y, float z);

@@ -93,18 +93,20 @@ void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c)
     uint32_t x_min = (uint32_t)std::min(std::min(v0.m_x, v1.m_x), v2.m_x);
     uint32_t y_min = (uint32_t)std::min(std::min(v0.m_y, v1.m_y), v2.m_y);
 
+    float z = (v0.m_z + v1.m_z + v2.m_z) / 3;
+
     Vertex p;
-    std::cout << "c1: " << c.red << ", " << c.green << ", " << c.blue << "\n";
+    // std::cout << "c1: " << c.red << ", " << c.green << ", " << c.blue << "\n";
     for (uint32_t y = y_min; y <= y_max; y++) {
         for (uint32_t x = x_min; x  <= x_max; x++) {
             p.m_x = (float)x; p.m_y = (float)y;
             float depth;
-            if (fb.getDepth(x, y, depth); p.m_z >= depth) {
+            if (fb.getDepth(x, y, depth); z >= depth) {
                 continue;
             }
             if (pointInTriangle(v0, v1, v2, p)) {
                 fb.setPixel(x, y, c);
-                fb.setDepth(x, y, (v0.m_z + v1.m_z + v2.m_z) / 3);
+                fb.setDepth(x, y, z);
             }
         }
     }

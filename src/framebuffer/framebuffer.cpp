@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 
 #include "../../include/framebuffer/framebuffer.h"
 
@@ -35,7 +36,9 @@ void Framebuffer::setBGC(Colour c) {
     m_BGC = c;
 
     for (uint32_t i = 0; i < m_width * m_height; i++) {
-        m_fb[i] = m_BGC;
+        m_fb[i].red = std::max(m_BGC.red, 0.0f);
+        m_fb[i].green = std::max(m_BGC.green, 0.0f);
+        m_fb[i].blue = std::max(m_BGC.blue, 0.0f);
         m_db[i] = INFINITY;
     }
 }
@@ -51,9 +54,9 @@ int Framebuffer::setPixel(uint32_t x, uint32_t y, float r, float g, float b) {
     uint32_t i = y * m_width + x;
 
     // Set pixel
-    m_fb[i].red = r;
-    m_fb[i].green= g;
-    m_fb[i].blue= b;
+    m_fb[i].red = std::max(0.0f, r);
+    m_fb[i].green= std::max(0.0f, g);
+    m_fb[i].blue= std::max(0.0f, b);
 
     return 0;
 }
@@ -68,9 +71,9 @@ int Framebuffer::setPixel(uint32_t x, uint32_t y, Colour c) {
     uint32_t i = y * m_width + x;
 
     // Set pixel
-    m_fb[i].red = c.red;
-    m_fb[i].green= c.green;
-    m_fb[i].blue= c.blue;
+    m_fb[i].red = std::max(0.0f, c.red);
+    m_fb[i].green= std::max(0.0f, c.green);
+    m_fb[i].blue= std::max(0.0f, c.blue);
 
     return 0;
 }
@@ -149,8 +152,12 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
         if (m_db[i] < d_min) { d_min = m_db[i]; }
     }
 
+    std::cout << "Image max: " << i_max << ", Image min: " << i_min << "\n";
+
     float i_diff = i_max - i_min;
     float d_diff = d_max - d_min;
+
+    std::cout << "Image diff: " << i_diff << "\n";
 
     if (i_diff == 0.0f) { i_diff = 1.0f; }
     if (d_diff == 0.0f) { d_diff = 1.0f; }

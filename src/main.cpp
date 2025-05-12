@@ -72,18 +72,24 @@ int main() {
 
     // Framebuffer instanciation
     Framebuffer fb(width, height);
+    Colour bgc = {0.02f, 0.3f, 0.1432f};
+    fb.setBGC(bgc);
 
-    const char* file = "../../assets/objects/cube_ccw.obj";
+    // const char* file = "../../assets/objects/cube_ccw.obj";
+    const char* file = "../../assets/objects/teapot.obj";
 
     // obj.print();
     ObjectParser* parser = new OBJParser();
     
     Polymesh* mesh =  parser->parse(file);
 
-    mesh->scale(4, 3, 1);
-    mesh->rotate(231, 231, 50);
-    mesh->translate(-2, 1, 5);
-    std::cout << mesh->getTransform();
+    Colour obj_col = {1, 1, 1};
+    mesh->setColour(obj_col);
+
+    // mesh->scale(4, 3, 1);
+    mesh->rotate(-90, 0, 0);
+    mesh->translate(-2, 2, 30);
+    // std::cout << mesh->getTransform();
     // mesh->translate(-2.5, 5, 10);
     // mesh->rotate(90, 0, 0);
 
