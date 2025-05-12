@@ -54,6 +54,7 @@ void Polymesh::translate(float x, float y, float z) {
     m_transform_data.offset.m_x = x;
     m_transform_data.offset.m_y = y;
     m_transform_data.offset.m_z = z;
+    m_dirty_transform = true;
 }
 // Scale
 void Polymesh::scale(float x, float y, float z) {
@@ -80,7 +81,7 @@ Matrix4x4& Polymesh::getTransform() {
         Matrix4x4 T = translationMatrix(m_transform_data.offset);
         Matrix4x4 R = rotationMatrixX(m_transform_data.rotate_x) * rotationMatrixY(m_transform_data.rotate_y) * rotationMatrixZ(m_transform_data.rotate_z);
         Matrix4x4 S = scaleMatrix(m_transform_data.scale_x, m_transform_data.scale_y, m_transform_data.scale_z);
-        m_transform = S * R * T;
+        m_transform = T * R * S;
         m_dirty_transform = false;
     }
     return m_transform;

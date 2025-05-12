@@ -134,11 +134,11 @@ Vertex Matrix4x4::operator*(const Vertex& v) {
 }
 Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) {
     Matrix4x4 result;
-    for (int row = 0; row < 4; ++row) {
-        for (int col = 0; col < 4; ++col) {
-            result.m_mat[col * 4 + row] = 0.0f;
-            for (int k = 0; k < 4; ++k) {
-                result.m_mat[col * 4 + row] += m_mat[k * 4 + row] * other.m_mat[col * 4 + k];
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            result.m_mat[row*4+col] = 0.0f;
+            for (int k = 0; k < 4; k++) {
+                result.m_mat[row*4+col] += m_mat[row*4+k] * other.m_mat[k*4+col];
             }
         }
     }

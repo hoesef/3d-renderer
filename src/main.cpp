@@ -73,18 +73,19 @@ int main() {
     // Framebuffer instanciation
     Framebuffer fb(width, height);
 
-    const char* file = "../../assets/objects/teapot.obj";
+    const char* file = "../../assets/objects/cube_ccw.obj";
 
     // obj.print();
     ObjectParser* parser = new OBJParser();
     
     Polymesh* mesh =  parser->parse(file);
 
-    // mesh->scale(4, 3, 1);
-    // mesh->rotate(231, 231, 50);
-    // mesh->translate(Vector(1, 1.5, 7));
-    mesh->translate(-2.5, 5, 20);
-    mesh->rotate(90, 0, 0);
+    mesh->scale(4, 3, 1);
+    mesh->rotate(231, 231, 50);
+    mesh->translate(-2, 1, 5);
+    std::cout << mesh->getTransform();
+    // mesh->translate(-2.5, 5, 10);
+    // mesh->rotate(90, 0, 0);
 
     // std::cout << "Offset: " << mesh->m_transform_data.offset << "\n"
     //           << "rotation: x(" << mesh->m_transform_data.rotate_x << ") y(" << mesh->m_transform_data.rotate_y << ") z("
@@ -109,6 +110,16 @@ int main() {
 
     int s = fb.plotImage(filename, depth);
     std::cout << (s==0?"success":"fail") << "\n";
+
+    // Matrix4x4 A(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+    // Matrix4x4 B(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4);
+
+    // std::cout << "A:\n" << A << "\n";
+    // std::cout << "B:\n" << B << "\n";
+
+    // std::cout << "A*B:\n" << A*A*B << "\n";
+
+    
     
     return 0;
 
