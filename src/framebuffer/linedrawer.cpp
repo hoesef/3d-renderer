@@ -10,17 +10,17 @@ uint32_t absi(int num) {
     return -num * (num < 0) + num * (num > 0);
 }
 
-void drawline(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1) {
+void drawline(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, Colour c) {
     if (absi(x1-x0) > absi(y1-y0)) {
         // Horizontal
-        drawlineH(fb, x0, y0, x1, y1);
+        drawlineH(fb, x0, y0, x1, y1, c);
     } else {
         // Vertical
-        drawlineV(fb, x0, y0, x1, y1);
+        drawlineV(fb, x0, y0, x1, y1, c);
     }
 }
 
-void drawlineH(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1) {
+void drawlineH(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, Colour c) {
     if (x0 > x1) {
         uint32_t temp = x0;
         x0 = x1;
@@ -41,7 +41,7 @@ void drawlineH(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t 
     int p = 2*dy - dx;
 
     for (int i = 0; i < dx+1; i++) {
-        fb.setPixel(x0+i, y, 1.0f, 1.0f, 1.0f);
+        fb.setPixel(x0+i, y, c);
         if (p >= 0) {
             y += dir;
             p -= 2*dx;
@@ -50,7 +50,7 @@ void drawlineH(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t 
     }
 }
 
-void drawlineV(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1) {
+void drawlineV(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, Colour c) {
     if (y0 > y1) {
         uint32_t temp = x0;
         x0 = x1;
@@ -71,7 +71,7 @@ void drawlineV(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t 
     int p = 2*dx - dy;
 
     for (int i = 0; i < dy+1; i++) {
-        fb.setPixel(x, y0+i, 1.0f, 1.0f, 1.0f);
+        fb.setPixel(x, y0+i, c);
         if (p >= 0) {
             x += dir;
             p -= 2*dy;
@@ -80,19 +80,13 @@ void drawlineV(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t 
     }
 }
 
-// void drawTriangle(Framebuffer& fb, float x0, float y0, float x1, float y1, float x2, float y2) {
-//     drawline(fb, (uint32_t)x0, (uint32_t)y0, (uint32_t)x1, (uint32_t)y1);
-//     drawline(fb, (uint32_t)x0, (uint32_t)y0, (uint32_t)x2, (uint32_t)y2);
-//     drawline(fb, (uint32_t)x1, (uint32_t)y1, (uint32_t)x2, (uint32_t)y2);
-// }
-
-void drawTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2) {
-    drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y);
-    drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
-    drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
+void drawTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c) {
+    drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y, c);
+    drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y, c);
+    drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y, c);
 }
 
-void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2) {
+void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c){
     uint32_t x_max = (uint32_t)std::max(std::max(v0.m_x, v1.m_x), v2.m_x);
     uint32_t y_max = (uint32_t)std::max(std::max(v0.m_y, v1.m_y), v2.m_y);
 
@@ -100,12 +94,17 @@ void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2) {
     uint32_t y_min = (uint32_t)std::min(std::min(v0.m_y, v1.m_y), v2.m_y);
 
     Vertex p;
-
+    std::cout << "c1: " << c.red << ", " << c.green << ", " << c.blue << "\n";
     for (uint32_t y = y_min; y <= y_max; y++) {
         for (uint32_t x = x_min; x  <= x_max; x++) {
             p.m_x = (float)x; p.m_y = (float)y;
+            float depth;
+            if (fb.getDepth(x, y, depth); p.m_z >= depth) {
+                continue;
+            }
             if (pointInTriangle(v0, v1, v2, p)) {
-                fb.setPixel(x, y, 1.0f, 1.0f, 1.0f);
+                fb.setPixel(x, y, c);
+                fb.setDepth(x, y, (v0.m_z + v1.m_z + v2.m_z) / 3);
             }
         }
     }
