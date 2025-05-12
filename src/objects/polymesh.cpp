@@ -5,6 +5,14 @@
 
 #include "../../include/objects/polymesh.h"
 
+void Polymesh::setColour(Colour c) {
+    m_col = c;
+}
+
+Colour Polymesh::getColour() {
+    return m_col;
+}
+
 void Polymesh::print() {
     std::cout << "\nVertex data\n";
     for (unsigned int i = 0; i < m_vertex_count; i++) {

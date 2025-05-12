@@ -39,15 +39,11 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         Vertex v1 = mesh.m_vertices[mesh.m_tris[i].v1];
         Vertex v2 = mesh.m_vertices[mesh.m_tris[i].v2];
 
-        std::cout << "Original:\nv0: " << v0 << "\nv1: " << v1 << "\nv2: " << v2 << "\n\n";
-
         // Position vertex (temporary, will be moved to object.applyTransform)
         Matrix4x4 transform = mesh.getTransform();
         v0 = transform * v0;
         v1 = transform * v1;
         v2 = transform * v2;
-
-        std::cout << "Transformed:\nv0: " << v0 << "\nv1: " << v1 << "\nv2: " << v2 << "\n\n";
 
         // Get surface normal
         Vector normal, line1, line2;
@@ -65,8 +61,6 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v1 = m_proj * v1;
         v2 = m_proj * v2;
 
-        std::cout << "Projected:\nv0: " << v0 << "\nv1: " << v1 << "\nv2: " << v2 << "\n\n";
-
         // w=z, so divide by w (perspective divide)
         homogenize(v0);
         homogenize(v1);
@@ -79,20 +73,17 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v1.m_x = (v1.m_x + 1.0f) * scaleX; v1.m_y = (1.0f - v1.m_y) * scaleY;
         v2.m_x = (v2.m_x + 1.0f) * scaleX; v2.m_y = (1.0f - v2.m_y) * scaleY;
 
-        std::cout << "Screen space:\nv0: " << v0 << "\nv1: " << v1 << "\nv2: " << v2 << "\n\n";
-
         // Clamping
         v0.m_x = min(max(0.0f, v0.m_x), (float)m_width); v0.m_y = min(max(0.0f, v0.m_y), (float)m_height);
         v1.m_x = min(max(0.0f, v1.m_x), (float)m_width); v1.m_y = min(max(0.0f, v1.m_y), (float)m_height);
         v2.m_x = min(max(0.0f, v2.m_x), (float)m_width); v2.m_y = min(max(0.0f, v2.m_y), (float)m_height);
 
         // Drawline
-        // drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v1.m_x, (uint32_t)v1.m_y);
-        // drawline(fb, (uint32_t)v0.m_x, (uint32_t)v0.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
-        // drawline(fb, (uint32_t)v1.m_x, (uint32_t)v1.m_y, (uint32_t)v2.m_x, (uint32_t)v2.m_y);
-        // std::cout << "Screen scpace:\nv0: " << v0 << "\nv1: " << v1 << "\nv2: " << v2 << "\n\n";
-        drawTriangle(fb, v0, v1, v2);
-        // fillTriangle(fb, v0, v1, v2);
+        // Very basic temporary lighting
+        float x = normal.dot({0, 0, -1});
+        Colour c = mesh.getColour();
+        c.red *= x; c.green *= x; c.blue *= x;
+        fillTriangle(fb, v0, v1, v2, c);
     }
 }
 void Perspective::makeProjMatrix() {
