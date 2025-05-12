@@ -28,13 +28,18 @@ class Vector {
         // Addition
         Vector operator+(float n);
         Vector operator+(const Vector& other);
+        Vector& operator+=(float n);
+        Vector& operator+=(const Vector& other);
         // Subtraction
         Vector operator-(float n);
         Vector operator-(const Vector& other);
+        Vector& operator-=(float n);
         // Multiplication
         Vector operator*(float n);
+        Vector& operator*=(float n);
         // Division
         Vector operator/(float n);
+        Vector& operator/=(float n);
         // Magnitude
         float magnitude();
         // To unit vector
