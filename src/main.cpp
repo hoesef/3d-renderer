@@ -78,6 +78,9 @@ int main() {
     delete camera;
     delete mesh;
     delete parser;  
+
+    int s = fb.plotImage(filename, depth);
+    std::cout << (s==0?"success":"fail") << "\n";   
     
     return 0;
 
