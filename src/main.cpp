@@ -17,7 +17,7 @@
 #include "..\include\maths\vector.h"
 #include "..\include\maths\matrix.h"
 
-#include "..\include\camera\perspective.h"
+#include "..\include\renderer\perspective.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535f
@@ -57,25 +57,24 @@ int main() {
     const char* file = "../../assets/objects/teapot.obj";
 
     ObjectParser* parser = new OBJParser();
-    
     Polymesh* mesh =  parser->parse(file);
 
     Colour obj_col = {1, 1, 1};
     mesh->setColour(obj_col);
 
-    mesh->rotate(-90, 0, 0);
-    mesh->translate(-2, 2, 30);
+    mesh->transform.rotate(-90, 100, -30);
+    mesh->transform.translate(-2, 2, 30);
 
     if (!mesh) {
         delete parser;
         return -1;
     }
     
-    Camera* camera = new Perspective(2, height, 90);
+    Renderer* renderer = new Perspective(2, height, 90);
     
-    camera->render(*mesh, fb);
+    renderer->render(*mesh, fb);
     
-    delete camera;
+    delete renderer;
     delete mesh;
     delete parser;  
 
