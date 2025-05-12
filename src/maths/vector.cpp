@@ -52,6 +52,18 @@ Vector Vector::operator+(float n) {
 Vector Vector::operator+(const Vector& other) {
     return Vector(m_x + other.m_x, m_y + other.m_y, m_z + other.m_z);
 }
+Vector& Vector::operator+=(float n) {
+    m_x += n;
+    m_y += n;
+    m_z += n;
+    return *this;
+}
+Vector& Vector::operator+=(const Vector& other) {
+    m_x += other.m_x;
+    m_y += other.m_y;
+    m_z += other.m_z;
+    return *this;
+}
 // Subtraction
 Vector Vector::operator-(float n) {
     return Vector(m_x - n, m_y - n, m_z - n);
@@ -59,9 +71,21 @@ Vector Vector::operator-(float n) {
 Vector Vector::operator-(const Vector& other) {
     return Vector(m_x - other.m_x, m_y - other.m_y, m_z - other.m_z);
 }
+Vector& Vector::operator-=(float n) {
+    m_x -= n;
+    m_y -= n;
+    m_z -= n;
+    return *this;
+}
 // Multiplication
 Vector Vector::operator*(float n) {
     return Vector(m_x * n, m_y * n, m_z * n);
+}
+Vector& Vector::operator*=(float n) {
+    m_x *= n;
+    m_y *= n;
+    m_z *= n;
+    return *this;
 }
 // Division
 Vector Vector::operator/(float n) {
@@ -69,6 +93,14 @@ Vector Vector::operator/(float n) {
         return Vector(0, 0, 0);
     }
     return Vector(m_x / n, m_y / n, m_z / n);
+}
+Vector& Vector::operator/=(float n) {
+    if (n != 0) {
+        m_x /= n;
+        m_y /= n;
+        m_z /= n;
+    }
+    return *this;
 }
 // Magnitude
 float Vector::magnitude() {
