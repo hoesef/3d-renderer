@@ -78,8 +78,6 @@ int main() {
     delete camera;
     delete mesh;
     delete parser;  
-
-    int s = fb.plotImage(filename, depth);
     
     return 0;
 
