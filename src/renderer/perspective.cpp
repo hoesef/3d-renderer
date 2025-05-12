@@ -1,4 +1,4 @@
-#include "..\..\include\camera\perspective.h"
+#include "..\..\include\renderer\perspective.h"
 #include <math.h>
 #include "..\..\include\framebuffer\linedrawer.h"
 
@@ -50,7 +50,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         Vertex v2 = mesh.m_vertices[mesh.m_tris[i].v2];
 
         // Position vertex (temporary, will be moved to object.applyTransform)
-        Matrix4x4 transform = mesh.getTransform();
+        Matrix4x4 transform = mesh.transform.get();
         v0 = transform * v0;
         v1 = transform * v1;
         v2 = transform * v2;

@@ -1,10 +1,10 @@
 #ifndef PERSPECTIVE_H_
 #define PERSPECTIVE_H_
 
-#include "base-camera.h"
+#include "base-renderer.h"
 #include "..\maths\vector.h"
 
-class Perspective : public Camera {
+class Perspective : public Renderer {
 
     private:
         float m_zNear = 0.1f;           // Near plane
