@@ -30,9 +30,6 @@ Framebuffer::Framebuffer(uint32_t w, uint32_t h, Colour c) {
 }
 
 void Framebuffer::setBGC(Colour c) {
-    // m_BGC.red = c.red;
-    // m_BGC.green = c.green;
-    // m_BGC.blue = c.blue;
     m_BGC = c;
 
     for (uint32_t i = 0; i < m_width * m_height; i++) {
@@ -152,12 +149,8 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
         if (m_db[i] < d_min) { d_min = m_db[i]; }
     }
 
-    std::cout << "Image max: " << i_max << ", Image min: " << i_min << "\n";
-
     float i_diff = i_max - i_min;
     float d_diff = d_max - d_min;
-
-    std::cout << "Image diff: " << i_diff << "\n";
 
     if (i_diff == 0.0f) { i_diff = 1.0f; }
     if (d_diff == 0.0f) { d_diff = 1.0f; }

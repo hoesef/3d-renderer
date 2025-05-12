@@ -96,7 +96,6 @@ void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c)
     float z = (v0.m_z + v1.m_z + v2.m_z) / 3;
 
     Vertex p;
-    // std::cout << "c1: " << c.red << ", " << c.green << ", " << c.blue << "\n";
     for (uint32_t y = y_min; y <= y_max; y++) {
         for (uint32_t x = x_min; x  <= x_max; x++) {
             p.m_x = (float)x; p.m_y = (float)y;

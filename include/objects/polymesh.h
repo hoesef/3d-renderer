@@ -30,9 +30,6 @@ struct TransformData {
 
 // TODO:
 // material
-// transform
-// transform_data (offset, rotation, scale)
-// dirty bit
 // center
 class Polymesh {
 
