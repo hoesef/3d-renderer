@@ -8,7 +8,7 @@
 
 class Matrix4x4 {
 
-    private:
+    public:
         float m_mat[16] = {0.0f};
 
     public:

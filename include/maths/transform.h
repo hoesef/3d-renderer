@@ -25,6 +25,7 @@ class Transform {
         Matrix4x4 m_translation;
         Matrix4x4 m_scale;
         Matrix4x4 transform;
+    public:
         // Dirty transform flag
         bool dirty_transform = true;
 
@@ -45,16 +46,14 @@ class Transform {
         void scaleY(float y);
         void scaleZ(float z);
         // Get transform
-        const Matrix4x4 get();
+        Matrix4x4 get();
+        Matrix4x4 getRotation();
+        Matrix4x4 getOffset();
+        Matrix4x4 getScale();
         // Reset transform
         void reset();
         // Destructor
         ~Transform() {}
-    
-    private:
-        const Matrix4x4 getRotation();
-        const Matrix4x4 getOffset();
-        const Matrix4x4 getScale();
 
 };
 

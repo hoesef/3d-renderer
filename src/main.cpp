@@ -54,7 +54,7 @@ int main() {
     Colour bgc = {0.02f, 0.3f, 0.1432f};
     fb.setBGC(bgc);
 
-    const char* file = "../../assets/objects/teapot.obj";
+    const char* file = "../../assets/objects/cube_ccw.obj";
 
     ObjectParser* parser = new OBJParser();
     Polymesh* mesh =  parser->parse(file);
@@ -62,15 +62,16 @@ int main() {
     Colour obj_col = {1, 1, 1};
     mesh->setColour(obj_col);
 
-    mesh->transform.rotate(-90, 100, -30);
-    mesh->transform.translate(-2, 2, 30);
+    // mesh->transform.rotate(-90, 100, -30);
+    // mesh->transform.scale(0.5, 0.5, 0.5);
+    mesh->transform.translate(0, 0, -10);
 
     if (!mesh) {
         delete parser;
         return -1;
     }
     
-    Renderer* renderer = new Perspective(2, height, 90);
+    Renderer* renderer = new Perspective(width, height, 90);
     
     renderer->render(*mesh, fb);
     

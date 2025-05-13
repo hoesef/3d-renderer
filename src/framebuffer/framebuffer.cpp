@@ -101,7 +101,7 @@ int Framebuffer::setDepth(uint32_t x, uint32_t y, float d) {
     }
 
     // Set depth
-    m_db[y * m_width + x] = d;
+    m_db[y * m_width + x] = -d;
     
     return 0;
 }
@@ -140,10 +140,10 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
         // Get max/min r,b,g value
         if (m_fb[i].red > i_max) { i_max = m_fb[i].red; }
         if (m_fb[i].red < i_min) { i_min = m_fb[i].red; }
-        if (m_fb[i].red > i_max) { i_max = m_fb[i].green; }
-        if (m_fb[i].red < i_min) { i_min = m_fb[i].green; }
-        if (m_fb[i].red > i_max) { i_max = m_fb[i].blue; }
-        if (m_fb[i].red < i_min) { i_min = m_fb[i].blue; }
+        if (m_fb[i].green > i_max) { i_max = m_fb[i].green; }
+        if (m_fb[i].green < i_min) { i_min = m_fb[i].green; }
+        if (m_fb[i].blue > i_max) { i_max = m_fb[i].blue; }
+        if (m_fb[i].blue < i_min) { i_min = m_fb[i].blue; }
         // Get max/min depth value
         if (m_db[i] > d_max && m_db[i] < INFINITY) { d_max = m_db[i]; }
         if (m_db[i] < d_min) { d_min = m_db[i]; }
