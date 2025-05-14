@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <math.h>
 
 #include "../../include/framebuffer/framebuffer.h"
 
@@ -165,9 +166,12 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
     // Write pixel data
     // Pixels are normalized (possible loss of realism)
     for (uint32_t i = 0; i < m_width * m_height; i++) {
-        image << (unsigned char)((m_fb[i].red - i_min) / i_diff * 255.00f);   // r
-        image << (unsigned char)((m_fb[i].green - i_min) / i_diff * 255.00f); // g
-        image << (unsigned char)((m_fb[i].blue - i_min) / i_diff * 255.00f);  // b
+        image << (unsigned char)std::min(255.f, (m_fb[i].red * 255));
+        image << (unsigned char)std::min(255.f, (m_fb[i].green * 255));
+        image << (unsigned char)std::min(255.f, (m_fb[i].blue * 255));
+        // image << (unsigned char)((m_fb[i].red - i_min) / i_diff * 255.00f);   // r
+        // image << (unsigned char)((m_fb[i].green - i_min) / i_diff * 255.00f); // g
+        // image << (unsigned char)((m_fb[i].blue - i_min) / i_diff * 255.00f);  // b
         depth << (unsigned char)((m_db[i] - d_min) / d_diff * 255.0f);  // d
     }
 

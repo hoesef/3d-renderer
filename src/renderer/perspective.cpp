@@ -43,15 +43,22 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         makeProjMatrix();
     }
 
-    Matrix4x4 R = mesh.transform.getRotation();
-    Matrix4x4 S = mesh.transform.getScale();
-    Matrix4x4 M = R * S;
+    // Matrix4x4 R = mesh.transform.getRotation();
+    // Matrix4x4 S = mesh.transform.getScale();
+    // Matrix4x4 M = R * S;
+    // M.m_mat[3] = M.m_mat[7] = M.m_mat[11] = 0;
+    // M.m_mat[12] = M.m_mat[13] = M.m_mat[14] = 0;
+    // M.m_mat[15] = 1;
+    // Matrix4x4 normalMatrix;
+    // M.inverse(normalMatrix);
+    // normalMatrix = normalMatrix.transpose();
+    Matrix4x4 normalMatrix;
+    Matrix4x4 M = mesh.transform.get();
     M.m_mat[3] = M.m_mat[7] = M.m_mat[11] = 0;
     M.m_mat[12] = M.m_mat[13] = M.m_mat[14] = 0;
-    M.m_mat[15] = 0;
-    Matrix4x4 normalMatrix;
+    M.m_mat[15] = 1;
     M.inverse(normalMatrix);
-    normalMatrix.transpose();
+    normalMatrix = normalMatrix.transpose();
 
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
         // Get vertex data
@@ -64,9 +71,12 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         line1 = v1 - v0;
         line2 = v2 - v0;
         normal = line1.cross(line2);
+        std::cout << "Normal was: " << normal << "\n";
         // normal.normalize();
         normal = normalMatrix * normal;
-        normal.normalize();
+        normal = normal.normalize();
+
+        std::cout << "Normal is now: " << normal << "\n\n";
 
         // Position vertex (temporary, will be moved to object.applyTransform)
         Matrix4x4 transform = mesh.transform.get();
@@ -105,7 +115,10 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
         // Drawline
         // Very basic temporary lighting
-        float x = normal.dot({0, 0, 1});
+        Vector lDir(0,0,1);
+        // lDir = normalMatrix * lDir;
+        std::cout << "Ldir: " << lDir << "\n";
+        float x = normal.dot(lDir);
         std::cout << "x: " << x << "\n\n";
         Colour c = mesh.getColour();
         c.red *= x; c.green *= x; c.blue *= x;
