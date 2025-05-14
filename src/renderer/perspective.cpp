@@ -43,22 +43,8 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         makeProjMatrix();
     }
 
-    // Matrix4x4 R = mesh.transform.getRotation();
-    // Matrix4x4 S = mesh.transform.getScale();
-    // Matrix4x4 M = R * S;
-    // M.m_mat[3] = M.m_mat[7] = M.m_mat[11] = 0;
-    // M.m_mat[12] = M.m_mat[13] = M.m_mat[14] = 0;
-    // M.m_mat[15] = 1;
-    // Matrix4x4 normalMatrix;
-    // M.inverse(normalMatrix);
-    // normalMatrix = normalMatrix.transpose();
-    Matrix4x4 normalMatrix;
-    Matrix4x4 M = mesh.transform.get();
-    M.m_mat[3] = M.m_mat[7] = M.m_mat[11] = 0;
-    M.m_mat[12] = M.m_mat[13] = M.m_mat[14] = 0;
-    M.m_mat[15] = 1;
-    M.inverse(normalMatrix);
-    normalMatrix = normalMatrix.transpose();
+    // Get object's normal matrix
+    Matrix4x4 normalMatrix = mesh.transform.getNormalMatrix();
 
     for (unsigned int i = 0; i < mesh.m_tri_count; i++) {
         // Get vertex data

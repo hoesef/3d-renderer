@@ -25,6 +25,8 @@ class Transform {
         Matrix4x4 m_translation;
         Matrix4x4 m_scale;
         Matrix4x4 transform;
+        Matrix4x4 inverse;
+        Matrix4x4 normalMatrix;
     public:
         // Dirty transform flag
         bool dirty_transform = true;
@@ -47,6 +49,8 @@ class Transform {
         void scaleZ(float z);
         // Get transform
         Matrix4x4 get();
+        Matrix4x4 getInverse();
+        Matrix4x4 getNormalMatrix();
         Matrix4x4 getRotation();
         Matrix4x4 getOffset();
         Matrix4x4 getScale();
@@ -54,6 +58,9 @@ class Transform {
         void reset();
         // Destructor
         ~Transform() {}
+    
+    private:
+        void makeMatrices();
 
 };
 

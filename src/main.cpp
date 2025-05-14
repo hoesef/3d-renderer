@@ -62,8 +62,8 @@ int main() {
     Colour obj_col = {1, 1, 1};
     mesh->setColour(obj_col);
 
-    mesh->transform.rotate(-45, 45, 45);
-    mesh->transform.scale(5, 0.5, 2);
+    mesh->transform.rotate(-45, -45, 285);
+    mesh->transform.scale(0.5, 0.5, 0.5);
     mesh->transform.translate(0, 0, -5);
 
     if (!mesh) {

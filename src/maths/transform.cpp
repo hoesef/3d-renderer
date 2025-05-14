@@ -83,14 +83,37 @@ Matrix4x4 Transform::getScale() {
     return m_scale;
 }
 Matrix4x4 Transform::get() {
-    if (dirty_transform) {
-        Matrix4x4 T = getOffset();
-        Matrix4x4 R = getRotation();
-        Matrix4x4 S = getScale();
-        transform = T * R * S;
-        dirty_transform = false;
-    }
+    makeMatrices();
     return transform;
+}
+Matrix4x4 Transform::getInverse() {
+    makeMatrices();
+    return inverse;
+}
+Matrix4x4 Transform::getNormalMatrix() {
+    makeMatrices();
+    return normalMatrix;
+}
+void Transform::makeMatrices() {
+    // Check if we need to recalc matrixes
+    if (!dirty_transform) { return; }
+    // Temp matrix for normals
+    Matrix4x4 temp;
+    // Get Rotation, translation, sclae
+    Matrix4x4 T = getOffset();
+    Matrix4x4 R = getRotation();
+    Matrix4x4 S = getScale();
+    // Calc temp matrix
+    temp = R * S;
+    // Calc full object-to-world transform
+    transform = T * temp;
+    // Calc inverse matrix (world-to-object)
+    transform.inverse(inverse);
+    // Calc normal matrix
+    temp.inverse(normalMatrix);
+    normalMatrix = normalMatrix.transpose();
+    // Reset flag
+    dirty_transform = false;   
 }
 // Reset transform
 void Transform::reset() {
