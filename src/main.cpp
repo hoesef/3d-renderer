@@ -55,31 +55,52 @@ int main() {
     fb.setBGC(bgc);
 
     const char* file = "../../assets/objects/teapot.obj";
+    // const char* file = "../../assets/objects/cube_ccw.obj";
 
     ObjectParser* parser = new OBJParser();
     Polymesh* mesh =  parser->parse(file);
 
-    Colour obj_col = {1, 1, 1};
+    const char* file2 = "../../assets/objects/cube_ccw.obj";
+    Polymesh* mesh2 = parser->parse(file2);
+    Colour obj_col2 = {1,1,1};
+    mesh2->setColour(obj_col2);
+
+    mesh2->transform.rotate(45, 45,  0);
+    mesh2->transform.scale(1, 1, 1);
+    mesh2->transform.translate(0, 0, -10);
+
+    if (!mesh2) {
+        delete parser;
+        return -1;
+    }
+
+    Colour obj_col = {0.7f, 0.32f, 0.53f};
     mesh->setColour(obj_col);
 
-    mesh->transform.rotate(-90, 100, -30);
-    mesh->transform.translate(-2, 2, 30);
+    mesh->transform.rotate(-70, 0,  0);
+    mesh->transform.scale(1, 1,1);
+    mesh->transform.translate(0, 0, -50);
 
     if (!mesh) {
+        delete mesh2;
         delete parser;
         return -1;
     }
     
-    Renderer* renderer = new Perspective(2, height, 90);
+    Renderer* renderer = new Perspective(width, height, 90);
     
+    std::cout << "Mesh 1\n";
     renderer->render(*mesh, fb);
+    std::cout << "Mesh 2\n";
+    renderer->render(*mesh2, fb);
     
     delete renderer;
     delete mesh;
+    delete mesh2;
     delete parser;  
 
     int s = fb.plotImage(filename, depth);
-    std::cout << (s==0?"success":"fail") << "\n";   
+    std::cout << (s==0?"success":"fail") << "\n";  
     
     return 0;
 

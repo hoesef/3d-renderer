@@ -43,7 +43,8 @@ class Vector {
         // Magnitude
         float magnitude();
         // To unit vector
-        Vector normalize();
+        void normalize();
+        void normalize(Vector& norm);
         // Distance
         float distance(const Vector& other);
         // Dot product

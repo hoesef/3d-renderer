@@ -20,7 +20,6 @@ class Perspective : public Renderer {
         Perspective();
         Perspective(int width, int height, float fov);
         void render(Polymesh& mesh, Framebuffer& fb) override;
-        void makeProjMatrix();
         ~Perspective() override;
 
 };

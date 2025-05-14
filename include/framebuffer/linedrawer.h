@@ -14,6 +14,7 @@ void drawlineV(Framebuffer& fb, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t 
 // Draw Triangle
 void drawTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c = {1,1,1});
 void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c = {1,1,1});
-bool pointInTriangle(Vertex& A, Vertex& B, Vertex& C, Vertex& P);
+bool barycentricCoords(const Vertex& A, const Vertex& B, const Vertex& C, const Vertex& P, float& u, float& v, float& w);
+bool pointInTriangle(Vertex& A, Vertex& B, Vertex& C, Vertex& P, float& u, float& v, float& w);
 
 #endif
