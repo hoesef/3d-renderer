@@ -107,12 +107,19 @@ float Vector::magnitude() {
     return std::sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
 }
 // Normalize
-Vector Vector::normalize() {
+void Vector::normalize() {
     float mag = magnitude();
     if (mag == 0) {
-        return Vector(0, 0, 0);
+        m_x = 0; m_y = 0; m_z = 0;
     }
-    return Vector(m_x / mag, m_y / mag, m_z / mag);
+    m_x /= mag; m_y /= mag; m_z /= mag;
+}
+void Vector::normalize(Vector& norm) {
+    float mag = magnitude();
+    if (mag == 0) {
+        norm.m_x = 0; norm.m_y = 0; norm.m_z = 0;
+    }
+    norm.m_x /= mag; norm.m_y /= mag; norm.m_z /= mag;
 }
 float Vector::distance(const Vector& other) {
     return (*this - other).magnitude();

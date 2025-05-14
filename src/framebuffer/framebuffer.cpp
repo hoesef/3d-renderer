@@ -13,7 +13,7 @@ Framebuffer::Framebuffer(uint32_t w, uint32_t h) {
 
     for (uint32_t i = 0; i < w*h; i++) {
         m_fb[i] = m_BGC;
-        m_db[i] = INFINITY;
+        m_db[i] = -INFINITY;
     }
 }
 
@@ -26,7 +26,7 @@ Framebuffer::Framebuffer(uint32_t w, uint32_t h, Colour c) {
 
     for (uint32_t i = 0; i < w*h; i++) {
         m_fb[i] = m_BGC;
-        m_db[i] = INFINITY;
+        m_db[i] = -INFINITY;
     }
 }
 
@@ -37,7 +37,7 @@ void Framebuffer::setBGC(Colour c) {
         m_fb[i].red = std::max(m_BGC.red, 0.0f);
         m_fb[i].green = std::max(m_BGC.green, 0.0f);
         m_fb[i].blue = std::max(m_BGC.blue, 0.0f);
-        m_db[i] = INFINITY;
+        m_db[i] = -INFINITY;
     }
 }
 
@@ -102,7 +102,7 @@ int Framebuffer::setDepth(uint32_t x, uint32_t y, float d) {
     }
 
     // Set depth
-    m_db[y * m_width + x] = -d;
+    m_db[y * m_width + x] = d;
     
     return 0;
 }
@@ -146,8 +146,8 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
         if (m_fb[i].blue > i_max) { i_max = m_fb[i].blue; }
         if (m_fb[i].blue < i_min) { i_min = m_fb[i].blue; }
         // Get max/min depth value
-        if (m_db[i] > d_max && m_db[i] < INFINITY) { d_max = m_db[i]; }
-        if (m_db[i] < d_min) { d_min = m_db[i]; }
+        if (m_db[i] > d_max) { d_max = m_db[i]; }
+        if (m_db[i] < d_min && m_db[i] > -INFINITY) { d_min = m_db[i]; }
     }
 
     float i_diff = i_max - i_min;
@@ -172,7 +172,7 @@ int Framebuffer::plotImage(const char* filename, const char* depthName) {
         // image << (unsigned char)((m_fb[i].red - i_min) / i_diff * 255.00f);   // r
         // image << (unsigned char)((m_fb[i].green - i_min) / i_diff * 255.00f); // g
         // image << (unsigned char)((m_fb[i].blue - i_min) / i_diff * 255.00f);  // b
-        depth << (unsigned char)((m_db[i] - d_min) / d_diff * 255.0f);  // d
+        depth << (unsigned char)((m_db[i] + d_max) / -d_diff * 255.0f);  // d
     }
 
     // Close image files

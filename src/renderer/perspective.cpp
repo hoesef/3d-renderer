@@ -57,19 +57,15 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         line1 = v1 - v0;
         line2 = v2 - v0;
         normal = line1.cross(line2);
-        std::cout << "Normal was: " << normal << "\n";
-        // normal.normalize();
         normal = normalMatrix * normal;
-        normal = normal.normalize();
-
-        std::cout << "Normal is now: " << normal << "\n\n";
+        normal.normalize();
 
         // Position vertex (temporary, will be moved to object.applyTransform)
         Matrix4x4 transform = mesh.transform.get();
         v0 = transform * v0;
         v1 = transform * v1;
         v2 = transform * v2;
-        
+
         // Check if face is towards camera
         if (normal.dot(v0.toVector() - pos) >= 0) { continue; }
 
@@ -80,14 +76,12 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
         if (v0.m_w <= 0 || v1.m_w <= 0 || v2.m_w <= 0) {continue;}
 
-        // std::cout << "v0: " << v0 << "\nv1: " << v1 << "\nv2 " << v2 << "\n\n";
-
         // w=z, so divide by w (perspective divide)
         homogenize(v0);
         homogenize(v1);
-        homogenize(v2);        
+        homogenize(v2);
 
-        // Convert to NCD, then scale to actual image
+        // Convert NCD to clip space
         float scaleX = 0.5f * m_width;
         float scaleY = 0.5f * m_height;
         v0.m_x = (v0.m_x + 1.0f) * scaleX; v0.m_y = (1.0f - v0.m_y) * scaleY;
@@ -102,10 +96,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         // Drawline
         // Very basic temporary lighting
         Vector lDir(0,0,1);
-        // lDir = normalMatrix * lDir;
-        std::cout << "Ldir: " << lDir << "\n";
         float x = normal.dot(lDir);
-        std::cout << "x: " << x << "\n\n";
         Colour c = mesh.getColour();
         c.red *= x; c.green *= x; c.blue *= x;
         fillTriangle(fb, v0, v1, v2, c);
@@ -113,11 +104,10 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 }
 void Perspective::makeProjMatrix() {
     float f = 1 / tanf(m_fov * 0.5f * M_PI / 180);
-    float q = m_zFar / (m_zFar-m_zNear);
     m_proj = Matrix4x4(
         f * m_a, 0, 0, 0,
               0, f, 0, 0,
-              0, 0, q, (-m_zNear)*q,
+              0, 0, (m_zFar + m_zNear) / (m_zFar - m_zNear), (2 * m_zFar * m_zNear) / (m_zFar-m_zNear),
               0, 0, -1, 0);
 }
 Perspective::~Perspective() {}
