@@ -62,7 +62,7 @@ void Transform::scaleZ(float z) {
 // Get transform
 Matrix4x4 Transform::getRotation() {
     if (dirty_rotate) {
-        m_rotation = rotationMatrixX(rotate_x) * rotationMatrixY(rotate_y) * rotationMatrixZ(rotate_z);
+        m_rotation = Matrix4x4::rotationMatrixX(rotate_x) * Matrix4x4::rotationMatrixY(rotate_y) * Matrix4x4::rotationMatrixZ(rotate_z);
         // m_rotation = rotationMatrixZ(rotate_z) * rotationMatrixY(rotate_y) * rotationMatrixX(rotate_x);
         dirty_rotate = false;
     }
@@ -70,14 +70,14 @@ Matrix4x4 Transform::getRotation() {
 }
 Matrix4x4 Transform::getOffset() {
     if (dirty_offset) {
-        m_translation = translationMatrix(offset);
+        m_translation = Matrix4x4::translationMatrix(offset);
         dirty_offset = false;
     }
     return m_translation;
 }
 Matrix4x4 Transform::getScale() {
     if (dirty_scale) {
-        m_scale = scaleMatrix(scale_x, scale_y, scale_z);
+        m_scale = Matrix4x4::scaleMatrix(scale_x, scale_y, scale_z);
         dirty_scale = false;
     }
     return m_scale;

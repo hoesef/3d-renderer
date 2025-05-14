@@ -306,14 +306,14 @@ std::ostream& operator<<(std::ostream& os, const Matrix4x4& m) {
 Matrix4x4::~Matrix4x4() {}
 
 
-Matrix4x4 translationMatrix(const Vector& offset) {
+Matrix4x4 Matrix4x4::translationMatrix(const Vector& offset) {
     return Matrix4x4(1, 0, 0, offset.m_x,
                      0, 1, 0, offset.m_y,
                      0, 0, 1, offset.m_z,
                      0, 0, 0, 1);
 }
 
-Matrix4x4 rotationMatrixX(float x) {
+Matrix4x4 Matrix4x4::rotationMatrixX(float x) {
     float cosX = cosf(RADIAN(x));
     float sinX = sinf(RADIAN(x));
     return Matrix4x4(1, 0, 0, 0,
@@ -321,7 +321,7 @@ Matrix4x4 rotationMatrixX(float x) {
                      0, sinX, cosX, 0,
                      0, 0, 0, 1);
 }
-Matrix4x4 rotationMatrixY(float y) {
+Matrix4x4 Matrix4x4::rotationMatrixY(float y) {
     float cosY = cosf(RADIAN(y));
     float sinY = sinf(RADIAN(y));
     return Matrix4x4(cosY, 0, sinY, 0,
@@ -329,7 +329,7 @@ Matrix4x4 rotationMatrixY(float y) {
                      -sinY, 0, cosY, 0,
                         0, 0, 0, 1);
 }
-Matrix4x4 rotationMatrixZ(float z) {
+Matrix4x4 Matrix4x4::rotationMatrixZ(float z) {
     float cosZ = cosf(RADIAN(z));
     float sinZ = sinf(RADIAN(z));
     return Matrix4x4(cosZ, -sinZ, 0, 0,
@@ -337,9 +337,17 @@ Matrix4x4 rotationMatrixZ(float z) {
                      0, 0, 1, 0,
                     0, 0, 0, 1);
 }
-Matrix4x4 scaleMatrix(float x, float y, float z) {
+Matrix4x4 Matrix4x4::scaleMatrix(float x, float y, float z) {
     return Matrix4x4(x, 0, 0, 0,
                      0, y, 0, 0,
                      0, 0, z, 0,
                      0, 0, 0, 1);
+}
+Matrix4x4 Matrix4x4::projectionMatrix(float fov, float a, float z_near, float z_far) {
+    float f = 1 / tanf(fov * 0.5f * M_PI / 180);
+    return Matrix4x4(
+        f * a, 0, 0, 0,
+              0, f, 0, 0,
+              0, 0, (z_far + z_near) / (z_far - z_near), (2 * z_far * z_near) / (z_far - z_near),
+              0, 0, -1, 0);
 }

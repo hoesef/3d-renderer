@@ -23,13 +23,15 @@ float min(float a, float b) {
     return a*(a < b) + b*(b < a);
 }
 
-Perspective::Perspective() { makeProjMatrix(); }
+Perspective::Perspective() {
+    m_proj = Matrix4x4::projectionMatrix(m_fov, m_a, m_zNear, m_zFar);
+}
 Perspective::Perspective(int width, int height, float fov) {
     m_width = width;
     m_height = height;
     m_a = (float)height / (float)width;
     m_fov = fov;
-    makeProjMatrix();
+    m_proj = Matrix4x4::projectionMatrix(m_fov, m_a, m_zNear, m_zFar);
 }
 void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
 
@@ -40,7 +42,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         m_width = fb.m_width;
         m_height = fb.m_height;
         m_a = (float)m_height / (float)m_width;
-        makeProjMatrix();
+        m_proj = Matrix4x4::projectionMatrix(m_fov, m_a, m_zNear, m_zFar);
     }
 
     // Get object's normal matrix
@@ -101,13 +103,5 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         c.red *= x; c.green *= x; c.blue *= x;
         fillTriangle(fb, v0, v1, v2, c);
     }
-}
-void Perspective::makeProjMatrix() {
-    float f = 1 / tanf(m_fov * 0.5f * M_PI / 180);
-    m_proj = Matrix4x4(
-        f * m_a, 0, 0, 0,
-              0, f, 0, 0,
-              0, 0, (m_zFar + m_zNear) / (m_zFar - m_zNear), (2 * m_zFar * m_zNear) / (m_zFar-m_zNear),
-              0, 0, -1, 0);
 }
 Perspective::~Perspective() {}
