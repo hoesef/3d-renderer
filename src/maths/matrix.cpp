@@ -152,6 +152,15 @@ Matrix4x4 Matrix4x4::transpose() {
         m_mat[2], m_mat[6], m_mat[10], m_mat[14],
         m_mat[3], m_mat[7], m_mat[11], m_mat[15]);
 }
+void Matrix4x4::T() {
+    Matrix4x4 T;
+    for (int row = 0; row < 4; row++) {
+        for (int col =0; col < 4; col++) {
+            T.m_mat[col * 4 + row] = m_mat[row * 4 + col];
+        }
+    }
+    *this = T;
+}
 // Inverse
 bool Matrix4x4::inverse(Matrix4x4& out) {
     Matrix4x4 inv;

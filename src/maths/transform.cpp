@@ -111,7 +111,7 @@ void Transform::makeMatrices() {
     transform.inverse(inverse);
     // Calc normal matrix
     temp.inverse(normalMatrix);
-    normalMatrix = normalMatrix.transpose();
+    normalMatrix.T();
     // Reset flag
     dirty_transform = false;   
 }

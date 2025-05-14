@@ -35,6 +35,7 @@ class Matrix4x4 {
         Matrix4x4 operator*(const Matrix4x4& other);
         // Transpose
         Matrix4x4 transpose();
+        void T();
         // Inverse
         bool inverse(Matrix4x4& out);
         // std out
