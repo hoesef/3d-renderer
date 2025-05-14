@@ -4,6 +4,8 @@
 #include "..\objects\polymesh.h"
 #include "..\framebuffer\framebuffer.h"
 #include "..\maths\matrix.h"
+#include "../camera/camera.h"
+
 
 class Renderer {
 
@@ -12,7 +14,7 @@ class Renderer {
 
     public:
         Renderer() = default;
-        virtual void render(Polymesh& mesh, Framebuffer& fb) = 0;
+        virtual void render(Camera& camera, Polymesh& mesh, Framebuffer& fb) = 0;
         virtual ~Renderer() {};
 
 };

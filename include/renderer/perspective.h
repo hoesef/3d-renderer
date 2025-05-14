@@ -19,7 +19,7 @@ class Perspective : public Renderer {
     public:
         Perspective();
         Perspective(int width, int height, float fov);
-        void render(Polymesh& mesh, Framebuffer& fb) override;
+        void render(Camera& camera, Polymesh& mesh, Framebuffer& fb) override;
         ~Perspective() override;
 
 };

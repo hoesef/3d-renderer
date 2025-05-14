@@ -18,6 +18,7 @@
 #include "..\include\maths\matrix.h"
 
 #include "..\include\renderer\perspective.h"
+#include "..\include\camera\camera.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535f
@@ -66,7 +67,7 @@ int main() {
     mesh2->setColour(obj_col2);
 
     mesh2->transform.rotate(45, 45,  0);
-    mesh2->transform.scale(1, 1, 1);
+    mesh2->transform.scale(1, 1, 10);
     mesh2->transform.translate(0, 0, -10);
 
     if (!mesh2) {
@@ -77,8 +78,8 @@ int main() {
     Colour obj_col = {0.7f, 0.32f, 0.53f};
     mesh->setColour(obj_col);
 
-    mesh->transform.rotate(-70, 0,  0);
-    mesh->transform.scale(1, 1,1);
+    mesh->transform.rotate(-90, 0,  0);
+    mesh->transform.scale(1, 1, 1);
     mesh->transform.translate(0, 0, -50);
 
     if (!mesh) {
@@ -87,12 +88,13 @@ int main() {
         return -1;
     }
     
+    Camera camera({0, 20, 10}, {0, 0, -50}, {0, 0, 1});
     Renderer* renderer = new Perspective(width, height, 90);
     
     std::cout << "Mesh 1\n";
-    renderer->render(*mesh, fb);
+    renderer->render(camera, *mesh, fb);
     std::cout << "Mesh 2\n";
-    renderer->render(*mesh2, fb);
+    renderer->render(camera, *mesh2, fb);
     
     delete renderer;
     delete mesh;

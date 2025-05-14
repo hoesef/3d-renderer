@@ -33,7 +33,7 @@ Perspective::Perspective(int width, int height, float fov) {
     m_fov = fov;
     m_proj = Matrix4x4::projectionMatrix(m_fov, m_a, m_zNear, m_zFar);
 }
-void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
+void Perspective::render(Camera& camera, Polymesh& mesh, Framebuffer& fb) {
 
     // Check framebuffer and camera are using the same dimensions
     // Probably just temporary, there may be a reason why you'd want them to be different?
@@ -69,7 +69,11 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         v2 = transform * v2;
 
         // Check if face is towards camera
-        if (normal.dot(v0.toVector() - pos) >= 0) { continue; }
+        if (normal.dot(v0.toVector() - camera.pos) >= 0) { continue; }
+
+        v0 = camera.worldToCamera * v0;
+        v1 = camera.worldToCamera * v1;
+        v2 = camera.worldToCamera * v2;
 
         // Project face to canvas
         v0 = m_proj * v0;
@@ -101,6 +105,7 @@ void Perspective::render(Polymesh& mesh, Framebuffer& fb) {
         float x = normal.dot(lDir);
         Colour c = mesh.getColour();
         c.red *= x; c.green *= x; c.blue *= x;
+        // c.red += c.red*x; c.green += c.green*x; c.blue += c.blue*x;
         fillTriangle(fb, v0, v1, v2, c);
     }
 }
