@@ -7,8 +7,8 @@
 class Camera {
 
     public:
-        // float yaw = -90;
-        // float pitch = 0;
+        float yaw = -90;
+        float pitch = 0;
         Vector forward;
         Vector up = {0, 1, 0};
         Vector right;
@@ -20,8 +20,8 @@ class Camera {
 
     public:
         Camera();
-        // Camera(float yaw, float pitch, Vector loopat, Vector up);
-        Camera(Vector v_pos, Vector v_look, Vector v_up);
+        Camera(Vector loopat, Vector up, float yaw, float pitch);
+        Camera(Vector v_pos, Vector v_look, Vector v_up); // Vector v_look, 
         ~Camera();
 
 };
