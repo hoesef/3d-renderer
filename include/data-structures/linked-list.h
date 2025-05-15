@@ -76,7 +76,8 @@ template <typename T> class Stack {
             return data;         
         }
         bool isEmpty() {
-            return m_head;
+            if (m_head) { return false; }
+            return true;
         }
         // friend std::ostream& operator<<(std::ostream& os, const Stack<T>& stack) {
         //     os << "[";

@@ -21,6 +21,8 @@
 #include "..\include\camera\camera.h"
 #include "..\include\data-structures\linked-list.h"
 
+#include "..\include\scene\scene.h"
+
 #ifndef M_PI
 #define M_PI 3.1415926535f
 #endif
@@ -97,10 +99,13 @@ int main() {
     renderer->render(camera2, *mesh, fb);
     std::cout << "Mesh 2\n";
     renderer->render(camera2, *mesh2, fb);
-    
+
+    {
+    Scene scene;
+    scene.addObject(mesh);
+    scene.addObject(mesh2);
+    }
     delete renderer;
-    delete mesh;
-    delete mesh2;
     delete parser;  
 
     int s = fb.plotImage(filename, depth);
