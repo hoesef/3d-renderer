@@ -75,6 +75,9 @@ template <typename T> class Stack {
             if (m_head)  { m_head->setPrev(nullptr); }
             return data;         
         }
+        bool isEmpty() {
+            return m_head;
+        }
         // friend std::ostream& operator<<(std::ostream& os, const Stack<T>& stack) {
         //     os << "[";
         //     Node<T>* head = stack.m_head;
