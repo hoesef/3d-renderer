@@ -94,7 +94,6 @@ void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c)
     uint32_t y_min = (uint32_t)std::min(std::min(v0.m_y, v1.m_y), v2.m_y);
 
     float depth;
-    // float z = (v0.m_z + v1.m_z + v2.m_z) / 3;
 
     Vertex p;
     for (uint32_t y = y_min; y <= y_max; y++) {
@@ -103,21 +102,12 @@ void fillTriangle(Framebuffer& fb, Vertex& v0, Vertex& v1, Vertex& v2, Colour c)
             float u, v, w;
             if (barycentricCoords(v0, v1, v2, p, u, v, w)) {
                 float z = u * v0.m_z + v * v1.m_z + w * v2.m_z;
-                // std::cout << "z: " << z << "\n";
                 if (fb.getDepth(x, y, depth); depth >= z) {
                     continue;
                 }
                 fb.setPixel(x, y, c);
                 fb.setDepth(x, y, z);
             }
-            // if (fb.getDepth(x, y, depth); depth >= z) {
-            //     continue;
-            // }
-            // // std::cout << "depth: " << depth << "\nz: " << z << "\n";
-            // if (pointInTriangle(v0, v1, v2, p)) {
-            //     fb.setPixel(x, y, c);
-            //     fb.setDepth(x, y, z);
-            // }
         }
     }
 }
@@ -131,24 +121,4 @@ bool barycentricCoords(const Vertex& A, const Vertex& B, const Vertex& C, const 
     w = 1.0f - u - v;
 
     return (u >= 0) && (v >= 0) && (w >= 0);
-}
-
-bool pointInTriangle(Vertex& A, Vertex& B, Vertex& C, Vertex& P, float& u, float& v, float& w) {
-    Vector v0 = C - A;
-    Vector v1 = B - A;
-    Vector v2 = P - A;
-
-    float dot00 = v0.dot(v0);
-    float dot01 = v0.dot(v1);
-    float dot02 = v0.dot(v2);
-    float dot11 = v1.dot(v1);
-    float dot12 = v1.dot(v2);
-
-    float denom = dot00 * dot11 - dot01 * dot01;
-    u = (dot11 * dot02 - dot01 * dot12) / denom;
-    v = (dot00 * dot12 - dot01 * dot02) / denom;
-    w = 1.0f - u - v;
-
-    return ((u >= 0) && (v >= 0) && (w >= 0));
-
 }

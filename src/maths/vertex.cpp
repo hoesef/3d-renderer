@@ -1,5 +1,5 @@
-#include "../../include/maths/vertex.h"
-#include "../../include/maths/vector.h"
+#include "..\..\include\maths\vertex.h"
+#include "..\..\include\maths\vector.h"
 
 // Constructor
 Vertex::Vertex() {}

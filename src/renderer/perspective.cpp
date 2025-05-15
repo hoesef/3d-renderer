@@ -1,5 +1,6 @@
-#include "..\..\include\renderer\perspective.h"
 #include <math.h>
+
+#include "..\..\include\renderer\perspective.h"
 #include "..\..\include\framebuffer\linedrawer.h"
 
 // Check if math variables have been defined

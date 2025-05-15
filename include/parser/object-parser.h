@@ -1,12 +1,7 @@
 #ifndef OBJECT_PARSER_H_
 #define OBJECT_PARSER_H_
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
-
-#include "../../include/objects/polymesh.h"
+#include "..\..\include\objects\polymesh.h"
 
 /*
  * Object parser abstract base class

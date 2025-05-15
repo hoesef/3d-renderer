@@ -4,7 +4,7 @@
 #include "..\objects\polymesh.h"
 #include "..\framebuffer\framebuffer.h"
 #include "..\maths\matrix.h"
-#include "../camera/camera.h"
+#include "..\camera\camera.h"
 
 
 class Renderer {
