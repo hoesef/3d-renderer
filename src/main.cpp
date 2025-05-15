@@ -19,6 +19,7 @@
 
 #include "..\include\renderer\perspective.h"
 #include "..\include\camera\camera.h"
+#include "..\include\data-structures\linked-list.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535f
