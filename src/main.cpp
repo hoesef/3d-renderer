@@ -88,13 +88,14 @@ int main() {
         return -1;
     }
     
-    Camera camera({0, 20, 10}, {0, 0, -50}, {0, 0, 1});
+    Camera camera({-30, 30, 10}, {0, -10, -30}, {0, 1, 0});
+    Camera camera2({-30, 30, 10}, {0, 1, 0}, 30.0f, 140.0f);
     Renderer* renderer = new Perspective(width, height, 90);
     
     std::cout << "Mesh 1\n";
-    renderer->render(camera, *mesh, fb);
+    renderer->render(camera2, *mesh, fb);
     std::cout << "Mesh 2\n";
-    renderer->render(camera, *mesh2, fb);
+    renderer->render(camera2, *mesh2, fb);
     
     delete renderer;
     delete mesh;
