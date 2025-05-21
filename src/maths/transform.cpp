@@ -1,4 +1,4 @@
-#include "../../include/maths/transform.h"
+#include "..\..\include\maths\transform.h"
 
 // Rotation
 void Transform::rotate(float x, float y, float z) {
@@ -63,7 +63,6 @@ void Transform::scaleZ(float z) {
 Matrix4x4 Transform::getRotation() {
     if (dirty_rotate) {
         m_rotation = Matrix4x4::rotationMatrixX(rotate_x) * Matrix4x4::rotationMatrixY(rotate_y) * Matrix4x4::rotationMatrixZ(rotate_z);
-        // m_rotation = rotationMatrixZ(rotate_z) * rotationMatrixY(rotate_y) * rotationMatrixX(rotate_x);
         dirty_rotate = false;
     }
     return m_rotation;

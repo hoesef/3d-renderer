@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdint>
 #include <math.h>
+#include <string>
 
 // 3rd party imports
 
@@ -13,7 +14,6 @@
 #include "..\include\parser\object-parser.h"
 #include "..\include\parser\obj-parser.h"
 
-#include <string>
 #include "..\include\maths\vector.h"
 #include "..\include\maths\matrix.h"
 
@@ -93,9 +93,7 @@ int main() {
     Camera camera2({-30, 30, 10}, {0, 1, 0}, 30.0f, 140.0f);
     Renderer* renderer = new Perspective(width, height, 90);
     
-    std::cout << "Mesh 1\n";
     renderer->render(camera2, *mesh, fb);
-    std::cout << "Mesh 2\n";
     renderer->render(camera2, *mesh2, fb);
     
     delete renderer;
@@ -103,8 +101,7 @@ int main() {
     delete mesh2;
     delete parser;  
 
-    int s = fb.plotImage(filename, depth);
-    std::cout << (s==0?"success":"fail") << "\n";  
+    fb.plotImage(filename, depth);
     
     return 0;
 

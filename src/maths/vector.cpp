@@ -1,7 +1,7 @@
-#include "../../include/maths/vector.h"
-#include "../../include/maths/vertex.h"
-
 #include <math.h>
+
+#include "..\..\include\maths\vector.h"
+#include "..\..\include\maths\vertex.h"
 
 Vector::Vector() {}
 Vector::Vector(float x, float y, float z) {m_x=x, m_y=y, m_z=z;}

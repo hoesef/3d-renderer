@@ -21,7 +21,7 @@ class Camera {
     public:
         Camera();
         Camera(Vector loopat, Vector up, float yaw, float pitch);
-        Camera(Vector v_pos, Vector v_look, Vector v_up); // Vector v_look, 
+        Camera(Vector v_pos, Vector v_look, Vector v_up);
         ~Camera();
 
 };

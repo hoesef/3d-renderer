@@ -1,4 +1,9 @@
-#include "../../include/parser/obj-parser.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+
+#include "..\..\include\parser\obj-parser.h"
 
 // Constructor
 OBJParser::OBJParser() {}
@@ -126,6 +131,4 @@ Polymesh* OBJParser::parse(const char* filename) {
 }
 
 // Destructor
-OBJParser::~OBJParser() {
-    std::cout << "ObjParser destructor called\n";
-}
+OBJParser::~OBJParser() { }

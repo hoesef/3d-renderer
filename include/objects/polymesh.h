@@ -46,23 +46,6 @@ class Polymesh {
         void setColour(Colour c);
         Colour getColour();
         void print();
-        // Rotation
-        // void rotate(float x, float y, float z);
-        // void rotate_x(float x);
-        // void rotate_y(float y);
-        // void rotate_z(float z);
-        // // Offset
-        // void translate(const Vector& v);
-        // void translate(float x, float y, float z);
-        // // Scale
-        // void scale(float x, float y, float z);
-        // void scale_x(float x);
-        // void scale_y(float y);
-        // void scale_z(float z);
-        // // Get transform
-        // const Matrix4x4 getTransform();
-        // void resetTransform();
-
         ~Polymesh() {};
 
 };

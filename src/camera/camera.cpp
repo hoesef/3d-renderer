@@ -34,16 +34,9 @@ Camera::Camera(Vector v_pos, Vector v_look, Vector v_up) {
                                right.m_y, up.m_y, forward.m_y, pos.m_y,
                                right.m_z, up.m_z, forward.m_z, pos.m_z,
                                0, 0, 0, 1);
-
-    std::cout << "Forward: " << forward << "\n";
-    std::cout << "Right: " << right << "\n";
-    std::cout << "Up: " << up << "\n";
-    std::cout << "Pos: " << pos << "\n";
-    // std::cout << "Forward: " << forward << "\n";
-
 }
 
-Camera::Camera(Vector v_pos, Vector v_up, float f_pitch, float f_yaw) { // Vector v_look,
+Camera::Camera(Vector v_pos, Vector v_up, float f_pitch, float f_yaw) {
     pos = v_pos;
     pitch = f_pitch;
     if (pitch > 89.0f) {
@@ -75,12 +68,6 @@ Camera::Camera(Vector v_pos, Vector v_up, float f_pitch, float f_yaw) { // Vecto
                                right.m_y, up.m_y, forward.m_y, pos.m_y,
                                right.m_z, up.m_z, forward.m_z, pos.m_z,
                                0, 0, 0, 1);
-
-    std::cout << "\n\nCamera 2: \n";
-    std::cout << "Forward: " << forward << "\n";
-    std::cout << "Right: " << right << "\n";
-    std::cout << "Up: " << up << "\n";
-    std::cout << "Pos: " << pos << "\n";
 }
 
 Camera::~Camera() {}
